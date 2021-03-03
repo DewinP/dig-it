@@ -10,9 +10,6 @@ class UserController {
     res: Response,
     next: NextFunction
   ) => {
-    if (!req.session.user) {
-      next(new HttpExeception({ statusCode: httpCode.NOT_AUTHORIZED }));
-    }
     try {
       let subscription = await service.subscribeToCommunity(req.body);
       res.json({ subscription });

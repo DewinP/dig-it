@@ -16,18 +16,7 @@ class AuthController {
   ) => {
     try {
       req.body.password = await argon2.hash(req.body.password);
-      let modelUser = await service.addUser(req.body);
-      let user: IUserMe = {
-        id: modelUser.id,
-        email: modelUser.email,
-        username: modelUser.username,
-        isAdmin: modelUser.isAdmin,
-        posts: modelUser.posts,
-        comments: modelUser.comments,
-        subscriptions: modelUser.subscriptions,
-        communities: modelUser.communities,
-        created_at: modelUser.created_at,
-      };
+      let user = await service.addUser(req.body);
       req.session.user = {
         id: user.id,
         username: user.username,
@@ -92,7 +81,7 @@ class AuthController {
           username: user.username,
           isAdmin: user.isAdmin,
         };
-        res.json({ user });
+        res.json(user);
       } else {
         next(
           new HttpExeception({
@@ -106,10 +95,10 @@ class AuthController {
 
   public static Me = async (req: Request, res: Response) => {
     if (!req.session.user) {
-      return;
+      res.sendStatus(httpCode.SUCCESS);
     } else {
       let user = await service.getMe(req.session.user.username);
-      res.json({ user });
+      res.json(user);
     }
   };
 }

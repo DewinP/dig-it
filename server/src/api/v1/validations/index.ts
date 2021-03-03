@@ -1,4 +1,5 @@
-import UserValidator from "./user.validator";
+import registerValidator from "./user.validator";
+import isAuth from "./isAuth.validator";
 import loginValidation from "./loginValidation";
 
-export { UserValidator, loginValidation };
+export { registerValidator, loginValidation, isAuth };

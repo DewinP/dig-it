@@ -13,13 +13,10 @@ const handleErrors = (
   let message = err.customErrMsg;
   switch (status) {
     case httpCode.BAD_REQUEST:
-      res.status(status).json({ errors });
+      res.status(status).json(errors);
       break;
     case httpCode.NOT_AUTHORIZED:
-      let genericMessage = "User is not authorized";
-      res
-        .status(status)
-        .json({ notAuthorized: true, message: message || genericMessage });
+      res.sendStatus(httpCode.NOT_AUTHORIZED);
       break;
     case httpCode.NOT_FOUND:
       res.status(status).json({ message });

@@ -27,7 +27,6 @@ export class CommunityService implements ICommunityResponse {
       .loadRelationCountAndMap("community.posts", "community.posts")
       .select(["community"])
       .addSelect(["founder.id", "founder.username", "founder.avatar"])
-
       .getMany();
   }
 }

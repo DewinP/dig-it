@@ -11,29 +11,25 @@ class CommunityController {
     res: Response,
     next: NextFunction
   ) => {
-    if (!req.session.user) {
-      next(new HttpExeception({ statusCode: httpCode.NOT_AUTHORIZED }));
-    } else {
-      try {
-        let input = {
-          name: req.body.name,
-          description: req.body.description,
-          hero_img: req.body.hero_img,
-          founderId: req.session.user.id,
-        };
-        let community = await service.createCommunity(input);
-        res.json({ community });
-      } catch (error) {
-        if (error.code === "23505") {
-          next(
-            new HttpExeception({
-              statusCode: httpCode.BAD_REQUEST,
-              errors: duplicationErrToFieldError(error.detail),
-            })
-          );
-        }
-        next();
+    try {
+      let input = {
+        name: req.body.name,
+        description: req.body.description,
+        hero_img: req.body.hero_img,
+        founderId: req.session.user!.id,
+      };
+      let community = await service.createCommunity(input);
+      res.json(community);
+    } catch (error) {
+      if (error.code === "23505") {
+        next(
+          new HttpExeception({
+            statusCode: httpCode.BAD_REQUEST,
+            errors: duplicationErrToFieldError(error.detail),
+          })
+        );
       }
+      next();
     }
   };
   public static GetCommunity = async (
@@ -43,7 +39,7 @@ class CommunityController {
   ) => {
     let community = await service.getCommunity(req.params.name);
     if (community) {
-      res.json({ community });
+      res.json(community);
     } else {
       next(
         new HttpExeception({
@@ -55,7 +51,7 @@ class CommunityController {
   };
   public static GetAllCommunities = async (_: Request, res: Response) => {
     let communities = await service.getAllCommunities();
-    res.json({ communities });
+    res.json(communities);
   };
 }
 

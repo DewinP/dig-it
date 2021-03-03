@@ -1,7 +1,5 @@
-import postValidation from "../validations/postValidation";
 import { NextFunction, Request, Response } from "express";
 import { PostService } from "../services/posts/post.service";
-import { IPostInput } from "../interfaces/interfaces";
 import { httpCode } from "../common/http-code.enum";
 import HttpExeception from "../common/http-exception";
 import duplicationErrToFieldError from "../helpers/duplicationErrToFieldError";
@@ -46,33 +44,19 @@ class PostController {
     res: Response,
     next: NextFunction
   ) => {
-    if (!req.session.user) {
-      next(new HttpExeception({ statusCode: httpCode.NOT_AUTHORIZED }));
-    } else {
-      let errors = await postValidation(req.body);
-      if (errors) {
-        next(new HttpExeception({ statusCode: httpCode.BAD_REQUEST, errors }));
+    try {
+      await service.createPost(req.body);
+      res.sendStatus(httpCode.SUCCESS_NO_CONTENT);
+    } catch (error) {
+      if (error.code === "23505") {
+        next(
+          new HttpExeception({
+            statusCode: httpCode.BAD_REQUEST,
+            errors: duplicationErrToFieldError(error.detail),
+          })
+        );
       }
-      let postInput: IPostInput = {
-        title: req.body.title,
-        body: req.body.body,
-        authorId: req.session.user.id,
-        communityId: req.body.communityId,
-      };
-      try {
-        let post = await service.createPost(postInput);
-        res.json(post);
-      } catch (error) {
-        if (error.code === "23505") {
-          next(
-            new HttpExeception({
-              statusCode: httpCode.BAD_REQUEST,
-              errors: duplicationErrToFieldError(error.detail),
-            })
-          );
-        }
-        next();
-      }
+      next();
     }
   };
 }
