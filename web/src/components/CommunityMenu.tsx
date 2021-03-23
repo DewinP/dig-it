@@ -1,9 +1,14 @@
 import React from "react";
 import { Button, Flex, Input, Select, Text } from "@chakra-ui/react";
+import { NavLink } from "react-router-dom";
 
-interface CommunityMenuProps {}
+interface CommunityMenuProps {
+  communityName: string;
+}
 
-export const CommunityMenu: React.FC<CommunityMenuProps> = ({}) => {
+export const CommunityMenu: React.FC<CommunityMenuProps> = ({
+  communityName,
+}) => {
   return (
     <Flex w="100%" h="35px" align="center" justify="space-between">
       <Flex align="center">
@@ -22,9 +27,11 @@ export const CommunityMenu: React.FC<CommunityMenuProps> = ({}) => {
         </Select>
       </Flex>
       <Input size="sm" w="sm" placeholder="search by title or author" />
-      <Button colorScheme="pink" size="sm">
-        create post
-      </Button>
+      <NavLink to={`${communityName}/submit`}>
+        <Button colorScheme="pink" size="sm">
+          create post
+        </Button>
+      </NavLink>
     </Flex>
   );
 };

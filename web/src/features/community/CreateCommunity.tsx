@@ -1,17 +1,15 @@
 import { Stack, Flex, Heading, Button } from "@chakra-ui/react";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { Formik, Form } from "formik";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { useAppDispatch } from "../../app/hooks";
+import { useCreateCommunityMutation } from "../../app/services/api";
 import { InputField } from "../../components/InputField";
 import { TextareaField } from "../../components/TextareaField";
 import { toErrorMap } from "../../helpers/toErrorMap";
 import { ICommunityInput } from "../../interfaces/interfaces";
-import { createCommunity } from "../community/community.slice";
 
 export const CreateCommunity: React.FC<{}> = () => {
-  const dispatch = useAppDispatch();
+  const [createCommunity] = useCreateCommunityMutation();
   let history = useHistory();
   const initialValues: ICommunityInput = { name: "", description: "" };
   return (
@@ -24,12 +22,12 @@ export const CreateCommunity: React.FC<{}> = () => {
           initialValues={initialValues}
           onSubmit={async (values, { setErrors }) => {
             try {
-              const resultAction = await dispatch(createCommunity(values));
-              unwrapResult(resultAction);
-              console.log("resilt", resultAction.payload);
-              history.push("/");
-            } catch (fieldErrors) {
-              setErrors(toErrorMap(fieldErrors));
+              let c = await createCommunity(values).unwrap();
+              history.push(`/c/${c.name}`);
+            } catch (error) {
+              if (error.status === 400) {
+                setErrors(toErrorMap(error.data));
+              }
             }
           }}
         >

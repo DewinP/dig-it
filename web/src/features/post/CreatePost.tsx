@@ -2,7 +2,6 @@ import { Stack, Flex, Heading, Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { useCommunityQuery } from "../../app/services/community";
 import { useCreatePostMutation } from "../../app/services/post";
 import { InputField } from "../../components/InputField";
 import { TextareaField } from "../../components/TextareaField";
@@ -15,10 +14,8 @@ interface RouteParams {
 export const CreatePost: React.FC<{}> = () => {
   let history = useHistory();
   let { name } = useParams<RouteParams>();
-  const { data } = useCommunityQuery(name);
-  const initialValues = { title: "", body: "", communityId: data!.id };
+  const initialValues = { title: "", body: "", community: name };
   const [createPost] = useCreatePostMutation();
-
   return (
     <Stack spacing={10}>
       <Flex justify="center">
