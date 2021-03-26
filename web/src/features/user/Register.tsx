@@ -1,33 +1,35 @@
-import React from "react";
-import { useAppDispatch } from "../../app/hooks";
+import { Stack, Flex, Heading, Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
-import { Flex, Heading, Stack, Button } from "@chakra-ui/react";
-import { toErrorMap } from "../../helpers/toErrorMap";
-import { InputField } from "../../components/InputField";
-import { unwrapResult } from "@reduxjs/toolkit";
+import React from "react";
 import { useHistory } from "react-router-dom";
-import { ILoginInput } from "../../interfaces/interfaces";
-import { useLoginMutation } from "../../app/services/auth";
+import { useRegisterMutation } from "../../app/services/api";
+import { InputField } from "../../components/InputField";
+import { toErrorMap } from "../../helpers/toErrorMap";
+import { IRegisterInput } from "../../interfaces/interfaces";
 
-export const Login: React.FC<{}> = () => {
-  const [login] = useLoginMutation();
+export const Register: React.FC<{}> = () => {
+  const [register] = useRegisterMutation();
   let history = useHistory();
-  const initialValues: ILoginInput = { username: "", password: "" };
+  const initialValues: IRegisterInput = {
+    username: "",
+    email: "",
+    password: "",
+  };
   return (
     <Stack>
       <Flex justify="center">
-        <Heading size="lg">Welcome back!</Heading>
+        <Heading size="lg">Join Dig-it!</Heading>
       </Flex>
       <Stack>
         <Formik
           initialValues={initialValues}
           onSubmit={async (values, { setErrors }) => {
             try {
-              await login(values).unwrap();
-              history.push("/");
-            } catch (errors) {
-              if (errors.status === 400) {
-                setErrors(toErrorMap(errors.data));
+              await register(values).unwrap();
+              history.push("/login");
+            } catch (error) {
+              if (error.status === 400) {
+                setErrors(toErrorMap(error.data));
               }
             }
           }}
@@ -42,7 +44,12 @@ export const Login: React.FC<{}> = () => {
                   width="400px"
                 />
                 <InputField
-                  type="password"
+                  name="email"
+                  placeholder="email"
+                  label="email"
+                  width="400px"
+                />
+                <InputField
                   name="password"
                   placeholder="password"
                   label="password"

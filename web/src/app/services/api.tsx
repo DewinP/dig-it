@@ -5,6 +5,7 @@ import {
   ILoginInput,
   IPost,
   IRegisterInput,
+  ISubscription,
   IUser,
 } from "../../interfaces/interfaces";
 
@@ -16,7 +17,7 @@ export const api = createApi({
     return {
       communities: build.query<ICommunity[], void>({
         query: () => "c",
-        provides: (returnValue, args) => [
+        provides: (returnValue) => [
           { type: "Community" as const, id: 1 },
           ...returnValue.map((c) => ({
             type: "Community" as const,
@@ -41,6 +42,13 @@ export const api = createApi({
         }),
         invalidates: [{ type: "Community", id: 1 }],
       }),
+      subcribe: build.mutation<ISubscription, string>({
+        query: (communityId) => ({
+          url: "c/subscribe",
+          method: "POST",
+          body: communityId,
+        }),
+      }),
       login: build.mutation<IUser, ILoginInput>({
         query: (input) => ({
           url: "auth/login",
@@ -55,6 +63,9 @@ export const api = createApi({
           body: input,
         }),
       }),
+      me: build.query<IUser, void>({
+        query: () => "auth/me",
+      }),
       post: build.query<IPost, string>({
         query: (name) => `posts/${name}`,
         provides: (_, args) => [
@@ -66,7 +77,7 @@ export const api = createApi({
       }),
       createPost: build.mutation<
         IPost,
-        { title: string; body: string; community: string }
+        { title: string; body: string; communityId: string }
       >({
         query: (input) => ({
           url: "posts/",
@@ -82,8 +93,10 @@ export const {
   useCommunityQuery,
   useCreateCommunityMutation,
   useCommunitiesQuery,
+  useSubcribeMutation,
   useLoginMutation,
   useRegisterMutation,
+  useMeQuery,
   usePostQuery,
   useCreatePostMutation,
 } = api;

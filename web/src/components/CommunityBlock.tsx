@@ -3,8 +3,9 @@ import React from "react";
 import { ICommunity } from "../interfaces/interfaces";
 import { FaUserAstronaut } from "react-icons/fa";
 import { useAppSelector } from "../app/hooks";
-import { selectCurrentUser } from "../features/auth/auth.slice";
+import { selectCurrentUser } from "../app/services/auth.slice";
 import { NavLink } from "react-router-dom";
+import { useSubcribeMutation } from "../app/services/api";
 
 interface CommunityBlockProps {
   community: ICommunity;
@@ -14,6 +15,7 @@ export const CommunityBlock: React.FC<CommunityBlockProps> = ({
   community,
 }) => {
   const { user } = useAppSelector(selectCurrentUser);
+  const [subscribe, { isLoading }] = useSubcribeMutation();
   const SubscribeButton = () => {
     let isSubscribed = user.subscriptions?.find(
       (subscription) => subscription.communityId === community.id
@@ -22,7 +24,12 @@ export const CommunityBlock: React.FC<CommunityBlockProps> = ({
       return <Button size="sm">unsubscribe</Button>;
     } else {
       return (
-        <Button size="sm" colorScheme="pink">
+        <Button
+          size="sm"
+          colorScheme="pink"
+          isLoading={isLoading}
+          onClick={() => subscribe(community.id)}
+        >
           subscribe
         </Button>
       );

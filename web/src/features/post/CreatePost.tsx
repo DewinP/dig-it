@@ -2,19 +2,18 @@ import { Stack, Flex, Heading, Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { useCreatePostMutation } from "../../app/services/post";
+import { useCreatePostMutation } from "../../app/services/api";
 import { InputField } from "../../components/InputField";
 import { TextareaField } from "../../components/TextareaField";
 import { toErrorMap } from "../../helpers/toErrorMap";
 
-interface RouteParams {
-  name: string;
+interface CreatePostProps {
+  communityId: string;
 }
 
-export const CreatePost: React.FC<{}> = () => {
+export const CreatePost: React.FC<CreatePostProps> = ({ communityId }) => {
   let history = useHistory();
-  let { name } = useParams<RouteParams>();
-  const initialValues = { title: "", body: "", community: name };
+  const initialValues = { title: "", body: "", communityId };
   const [createPost] = useCreatePostMutation();
   return (
     <Stack spacing={10}>

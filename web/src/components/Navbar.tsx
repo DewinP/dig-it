@@ -1,10 +1,12 @@
 import { Flex, Heading, Text } from "@chakra-ui/react";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../app/hooks";
-import { selectCurrentUser } from "../features/auth/auth.slice";
+import { useMeQuery } from "../app/services/api";
+import { selectCurrentUser } from "../app/services/auth.slice";
 
 export const Navbar: React.FC<{}> = () => {
+  let { isLoading } = useMeQuery();
   let { user } = useAppSelector(selectCurrentUser);
   return (
     <>
@@ -24,7 +26,7 @@ export const Navbar: React.FC<{}> = () => {
           </NavLink>
         </Flex>
         <Flex>
-          {user.id ? (
+          {user.id && !isLoading && (
             <Flex>
               <NavLink to="/create-community">
                 <Text mr="20px">Create community</Text>
@@ -37,7 +39,8 @@ export const Navbar: React.FC<{}> = () => {
               </NavLink>
               <Text>{user.username}</Text>
             </Flex>
-          ) : (
+          )}
+          {!isLoading && !user.id && (
             <Fragment>
               <NavLink to="/login">
                 <Text mr="20px">Login</Text>

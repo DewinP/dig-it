@@ -1,9 +1,17 @@
 import { getRepository } from "typeorm";
-import { ICommunityInput } from "../../interfaces/interfaces";
+import {
+  ICommunityInput,
+  ISubscriptionInput,
+} from "../../interfaces/interfaces";
 import { ICommunityResponse } from "../service.intefaces";
-import { Community } from "../../models";
+import { Community, Community_User } from "../../models";
 //buy Bitcoin and go to the moon
 export class CommunityService implements ICommunityResponse {
+  async subscribeToCommunity(
+    input: ISubscriptionInput
+  ): Promise<Community_User> {
+    return await getRepository(Community_User).save(input);
+  }
   async createCommunity(input: ICommunityInput): Promise<Community> {
     return await getRepository(Community).save(input);
   }

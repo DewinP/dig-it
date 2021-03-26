@@ -30,6 +30,7 @@ export interface ISubscription {
   userId: string;
   communityId: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface ILoginInput {

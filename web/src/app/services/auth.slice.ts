@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { api } from "../../app/services/api";
-import { RootState } from "../../app/store";
 import { IUser } from "../../interfaces/interfaces";
+import { RootState } from "../store";
+import { api } from "./api";
 
 interface AuthState {
   user: IUser;
@@ -23,6 +23,12 @@ export const authSlice = createSlice({
       }
     );
     builder.addMatcher(
+      api.endpoints.me.matchFulfilled,
+      (state, { payload }) => {
+        state.user = payload.result;
+      }
+    );
+    builder.addMatcher(
       api.endpoints.createPost.matchFulfilled,
       (state, { payload }) => {
         state.user.posts.push(payload.result);
@@ -32,6 +38,12 @@ export const authSlice = createSlice({
       api.endpoints.createPost.matchFulfilled,
       (state, { payload }) => {
         state.user.posts.push(payload.result);
+      }
+    );
+    builder.addMatcher(
+      api.endpoints.subcribe.matchFulfilled,
+      (state, { payload }) => {
+        state.user.subscriptions.push(payload.result);
       }
     );
   },

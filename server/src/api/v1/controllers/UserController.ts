@@ -5,18 +5,6 @@ import { UserService } from "../services/users/users.service";
 
 const service = new UserService();
 class UserController {
-  public static SubscribeToCommunity = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      let subscription = await service.subscribeToCommunity(req.body);
-      res.json({ subscription });
-    } catch (error) {
-      next();
-    }
-  };
   public static GetUserByUsername = async (
     req: Request,
     res: Response,

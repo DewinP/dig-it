@@ -6,6 +6,19 @@ import { CommunityService } from "../services/communities/community.service";
 
 const service = new CommunityService();
 class CommunityController {
+  public static SubscribeToCommunity = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      let subscription = await service.subscribeToCommunity(req.body);
+      res.json(subscription);
+    } catch (error) {
+      next();
+    }
+  };
+
   public static CreateCommunity = async (
     req: Request,
     res: Response,

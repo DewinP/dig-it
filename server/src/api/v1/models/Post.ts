@@ -24,10 +24,10 @@ export class Post extends BaseEntity {
   body!: string;
 
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updated_at: Date;
+  updatedAt: Date;
 
   @Column()
   authorId: string;

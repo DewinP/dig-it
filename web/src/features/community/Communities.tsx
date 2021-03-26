@@ -1,6 +1,6 @@
 import { Stack } from "@chakra-ui/react";
 import React from "react";
-import { useCommunitiesQuery } from "../../app/services/community";
+import { useCommunitiesQuery } from "../../app/services/api";
 import { CommunityBlock } from "../../components/CommunityBlock";
 
 export const Communities: React.FC<{}> = () => {

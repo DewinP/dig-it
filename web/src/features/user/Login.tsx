@@ -1,37 +1,31 @@
-import { Stack, Flex, Heading, Button } from "@chakra-ui/react";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { Formik, Form } from "formik";
 import React from "react";
-import { useHistory } from "react-router-dom";
-import { useAppDispatch } from "../../app/hooks";
-import { useRegisterMutation } from "../../app/services/auth";
-import { InputField } from "../../components/InputField";
+import { Formik, Form } from "formik";
+import { Flex, Heading, Stack, Button } from "@chakra-ui/react";
 import { toErrorMap } from "../../helpers/toErrorMap";
-import { IRegisterInput } from "../../interfaces/interfaces";
+import { InputField } from "../../components/InputField";
+import { useHistory } from "react-router-dom";
+import { ILoginInput } from "../../interfaces/interfaces";
+import { useLoginMutation } from "../../app/services/api";
 
-export const Register: React.FC<{}> = () => {
-  const [register] = useRegisterMutation();
+export const Login: React.FC<{}> = () => {
+  const [login] = useLoginMutation();
   let history = useHistory();
-  const initialValues: IRegisterInput = {
-    username: "",
-    email: "",
-    password: "",
-  };
+  const initialValues: ILoginInput = { username: "", password: "" };
   return (
     <Stack>
       <Flex justify="center">
-        <Heading size="lg">Join Dig-it!</Heading>
+        <Heading size="lg">Welcome back!</Heading>
       </Flex>
       <Stack>
         <Formik
           initialValues={initialValues}
           onSubmit={async (values, { setErrors }) => {
             try {
-              await register(values).unwrap();
-              history.push("/login");
-            } catch (error) {
-              if (error.status === 400) {
-                setErrors(toErrorMap(error.data));
+              await login(values).unwrap();
+              history.push("/");
+            } catch (errors) {
+              if (errors.status === 400) {
+                setErrors(toErrorMap(errors.data));
               }
             }
           }}
@@ -46,12 +40,7 @@ export const Register: React.FC<{}> = () => {
                   width="400px"
                 />
                 <InputField
-                  name="email"
-                  placeholder="email"
-                  label="email"
-                  width="400px"
-                />
-                <InputField
+                  type="password"
                   name="password"
                   placeholder="password"
                   label="password"

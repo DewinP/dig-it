@@ -13,7 +13,7 @@ class PostController {
   ) => {
     let post = await service.getPostByTitle(req.params.title);
     if (post) {
-      res.json({ post });
+      res.json(post);
     } else {
       next(
         new HttpExeception({
