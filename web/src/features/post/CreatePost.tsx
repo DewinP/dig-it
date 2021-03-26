@@ -1,7 +1,7 @@
 import { Stack, Flex, Heading, Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import React from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useCreatePostMutation } from "../../app/services/api";
 import { InputField } from "../../components/InputField";
 import { TextareaField } from "../../components/TextareaField";

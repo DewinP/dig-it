@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Community } from "./features/community/Community";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
@@ -9,7 +9,6 @@ import { Communities } from "./features/community/Communities";
 import { CreateCommunity } from "./features/community/CreateCommunity";
 import { CreatePost } from "./features/post/CreatePost";
 import { Post } from "./features/post/Post";
-import { useMeQuery } from "./app/services/api";
 
 function App() {
   return (

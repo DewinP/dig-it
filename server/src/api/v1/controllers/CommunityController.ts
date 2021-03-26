@@ -12,7 +12,10 @@ class CommunityController {
     next: NextFunction
   ) => {
     try {
-      let subscription = await service.subscribeToCommunity(req.body);
+      let subscription = await service.subscribeToCommunity({
+        communityId: req.body.communityId,
+        userId: req.session.user!.id,
+      });
       res.json(subscription);
     } catch (error) {
       next();

@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@rtk-incubator/rtk-query";
+import { Community } from "../../features/community/Community";
 import {
   ICommunity,
   ICommunityInput,
@@ -27,10 +28,10 @@ export const api = createApi({
       }),
       community: build.query<ICommunity, string>({
         query: (name) => `c/${name}`,
-        provides: (_, args) => [
+        provides: (returnValue, args) => [
           {
             type: "Community" as const,
-            id: args,
+            id: returnValue.id,
           },
         ],
       }),
@@ -42,12 +43,13 @@ export const api = createApi({
         }),
         invalidates: [{ type: "Community", id: 1 }],
       }),
-      subcribe: build.mutation<ISubscription, string>({
+      subscribe: build.mutation<ISubscription, string>({
         query: (communityId) => ({
-          url: "c/subscribe",
+          url: "c/sub",
           method: "POST",
-          body: communityId,
+          body: { communityId },
         }),
+        invalidates: (returnValue) => [{ type: "Community", id: 1 }],
       }),
       login: build.mutation<IUser, ILoginInput>({
         query: (input) => ({
@@ -93,7 +95,7 @@ export const {
   useCommunityQuery,
   useCreateCommunityMutation,
   useCommunitiesQuery,
-  useSubcribeMutation,
+  useSubscribeMutation,
   useLoginMutation,
   useRegisterMutation,
   useMeQuery,

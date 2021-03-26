@@ -5,7 +5,6 @@ import {
 } from "../../interfaces/interfaces";
 import { ICommunityResponse } from "../service.intefaces";
 import { Community, Community_User } from "../../models";
-//buy Bitcoin and go to the moon
 export class CommunityService implements ICommunityResponse {
   async subscribeToCommunity(
     input: ISubscriptionInput

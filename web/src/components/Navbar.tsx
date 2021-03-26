@@ -1,5 +1,5 @@
 import { Flex, Heading, Text } from "@chakra-ui/react";
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../app/hooks";
 import { useMeQuery } from "../app/services/api";
@@ -9,7 +9,7 @@ export const Navbar: React.FC<{}> = () => {
   let { isLoading } = useMeQuery();
   let { user } = useAppSelector(selectCurrentUser);
   return (
-    <>
+    <Fragment>
       <Flex
         h="50px"
         w="100%"
@@ -52,6 +52,6 @@ export const Navbar: React.FC<{}> = () => {
           )}
         </Flex>
       </Flex>
-    </>
+    </Fragment>
   );
 };

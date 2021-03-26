@@ -5,6 +5,7 @@ import { api } from "./api";
 
 interface AuthState {
   user: IUser;
+  isLoading: false;
 }
 
 const initialState: AuthState = {
@@ -41,7 +42,7 @@ export const authSlice = createSlice({
       }
     );
     builder.addMatcher(
-      api.endpoints.subcribe.matchFulfilled,
+      api.endpoints.subscribe.matchFulfilled,
       (state, { payload }) => {
         state.user.subscriptions.push(payload.result);
       }

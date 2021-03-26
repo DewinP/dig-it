@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Stack } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { CommunityMenu } from "../../components/CommunityMenu";
 import { CommunityPost } from "../../components/CommunityPost";
-import { useCommunityQuery, useSubcribeMutation } from "../../app/services/api";
+import { useCommunityQuery } from "../../app/services/api";
 
 interface RouteParams {
   communityName: string;
