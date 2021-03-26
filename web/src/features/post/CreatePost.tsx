@@ -2,31 +2,34 @@ import { Stack, Flex, Heading, Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { useCreateCommunityMutation } from "../../app/services/api";
+import { useCreatePostMutation } from "../../app/services/api";
 import { InputField } from "../../components/InputField";
 import { TextareaField } from "../../components/TextareaField";
 import { toErrorMap } from "../../helpers/toErrorMap";
-import { ICommunityInput } from "../../interfaces/interfaces";
 
-export const CreateCommunity: React.FC<{}> = () => {
-  const [createCommunity] = useCreateCommunityMutation();
+interface CreatePostProps {
+  communityId: string;
+}
+
+export const CreatePost: React.FC<CreatePostProps> = ({ communityId }) => {
   let history = useHistory();
-  const initialValues: ICommunityInput = { name: "", description: "" };
+  const initialValues = { title: "", body: "", communityId };
+  const [createPost] = useCreatePostMutation();
   return (
     <Stack spacing={10}>
       <Flex justify="center">
-        <Heading size="lg">Create your a community</Heading>
+        <Heading size="lg">Create new post</Heading>
       </Flex>
       <Stack>
         <Formik
           initialValues={initialValues}
           onSubmit={async (values, { setErrors }) => {
             try {
-              let c = await createCommunity(values).unwrap();
-              history.push(`/c/${c.name}`);
-            } catch (error) {
-              if (error.status === 400) {
-                setErrors(toErrorMap(error.data));
+              await createPost(values).unwrap();
+              history.goBack();
+            } catch (errors) {
+              if (errors.status === 400) {
+                setErrors(toErrorMap(errors.data));
               }
             }
           }}
@@ -35,16 +38,15 @@ export const CreateCommunity: React.FC<{}> = () => {
             <Form>
               <Stack align="center">
                 <InputField
-                  name="name"
-                  placeholder="name your community"
-                  label="Community name"
+                  name="title"
+                  placeholder="post title"
+                  label="Title"
                   width="400px"
                   limit={25}
                 />
                 <TextareaField
-                  label="Community description"
-                  name="description"
-                  placeholder="...whats your community about"
+                  name="body"
+                  placeholder="...share your mind"
                   width="400px"
                 />
                 <Button
@@ -54,7 +56,7 @@ export const CreateCommunity: React.FC<{}> = () => {
                   type="submit"
                   width="400px"
                 >
-                  Create Community
+                  Post
                 </Button>
               </Stack>
             </Form>

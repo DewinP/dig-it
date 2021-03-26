@@ -1,16 +1,14 @@
 import React from "react";
-import { useAppDispatch } from "../../app/hooks";
-import { loginUser } from "./user.slice";
 import { Formik, Form } from "formik";
 import { Flex, Heading, Stack, Button } from "@chakra-ui/react";
 import { toErrorMap } from "../../helpers/toErrorMap";
 import { InputField } from "../../components/InputField";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { useHistory } from "react-router-dom";
 import { ILoginInput } from "../../interfaces/interfaces";
+import { useLoginMutation } from "../../app/services/api";
 
 export const Login: React.FC<{}> = () => {
-  const dispatch = useAppDispatch();
+  const [login] = useLoginMutation();
   let history = useHistory();
   const initialValues: ILoginInput = { username: "", password: "" };
   return (
@@ -23,11 +21,12 @@ export const Login: React.FC<{}> = () => {
           initialValues={initialValues}
           onSubmit={async (values, { setErrors }) => {
             try {
-              const resultAction = await dispatch(loginUser(values));
-              unwrapResult(resultAction);
+              await login(values).unwrap();
               history.push("/");
-            } catch (fieldErrors) {
-              setErrors(toErrorMap(fieldErrors));
+            } catch (errors) {
+              if (errors.status === 400) {
+                setErrors(toErrorMap(errors.data));
+              }
             }
           }}
         >

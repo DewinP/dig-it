@@ -1,19 +1,15 @@
 import { Flex, Heading, Text } from "@chakra-ui/react";
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { NavLink } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../app/hooks";
-import { fetchMe, userSelector } from "../features/user/user.slice";
+import { useAppSelector } from "../app/hooks";
+import { useMeQuery } from "../app/services/api";
+import { selectCurrentUser } from "../app/services/auth.slice";
 
 export const Navbar: React.FC<{}> = () => {
-  let { user, isLoggedIn } = useAppSelector(userSelector);
-  let dispatch = useAppDispatch();
-  useEffect(() => {
-    if (!isLoggedIn) {
-      dispatch(fetchMe());
-    }
-  });
+  let { isLoading } = useMeQuery();
+  let { user } = useAppSelector(selectCurrentUser);
   return (
-    <>
+    <Fragment>
       <Flex
         h="50px"
         w="100%"
@@ -30,7 +26,7 @@ export const Navbar: React.FC<{}> = () => {
           </NavLink>
         </Flex>
         <Flex>
-          {isLoggedIn ? (
+          {user.id && !isLoading && (
             <Flex>
               <NavLink to="/create-community">
                 <Text mr="20px">Create community</Text>
@@ -43,7 +39,8 @@ export const Navbar: React.FC<{}> = () => {
               </NavLink>
               <Text>{user.username}</Text>
             </Flex>
-          ) : (
+          )}
+          {!isLoading && !user.id && (
             <Fragment>
               <NavLink to="/login">
                 <Text mr="20px">Login</Text>
@@ -55,6 +52,6 @@ export const Navbar: React.FC<{}> = () => {
           )}
         </Flex>
       </Flex>
-    </>
+    </Fragment>
   );
 };

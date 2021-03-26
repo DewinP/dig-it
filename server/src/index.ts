@@ -4,7 +4,6 @@ import DatabaseConfig from "./config/DatabaseConfig";
 import express from "express";
 import morgan from "morgan";
 import { COOKIE_NAME, PORT, SESSION_SECRET } from "./config/constants";
-import bodyParser from "body-parser";
 import apiRoutes from "./api/v1/routes/index";
 import session from "express-session";
 import handleErrors from "./api/v1/middlewares/handleErrors";
@@ -21,8 +20,8 @@ const main = async () => {
   app.set("trust proxy", 1);
   app
     .use(morgan("dev"))
-    .use(bodyParser.urlencoded({ extended: false }))
-    .use(bodyParser.json())
+    .use(express.urlencoded({ extended: false }))
+    .use(express.json())
     .use(
       session({
         name: COOKIE_NAME,

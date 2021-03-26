@@ -1,30 +1,37 @@
-import { Flex, Stack, Text, Button } from "@chakra-ui/react";
-import React from "react";
+import { Flex, Stack, Text, Button, Skeleton } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import { ICommunity } from "../interfaces/interfaces";
 import { FaUserAstronaut } from "react-icons/fa";
 import { useAppSelector } from "../app/hooks";
-import { userSelector } from "../features/user/user.slice";
+import { selectCurrentUser } from "../app/services/auth.slice";
 import { NavLink } from "react-router-dom";
+import { useSubscribeMutation } from "../app/services/api";
 
 interface CommunityBlockProps {
   community: ICommunity;
   userId?: string;
 }
-
 export const CommunityBlock: React.FC<CommunityBlockProps> = ({
   community,
 }) => {
-  const { user, isLoggedIn } = useAppSelector(userSelector);
-
+  const [subscribe, { isLoading }] = useSubscribeMutation();
+  const { user } = useAppSelector(selectCurrentUser);
   const SubscribeButton = () => {
-    let isSubscribed = user.subscriptions.find(
+    let isSubscribed = user.subscriptions?.find(
       (subscription) => subscription.communityId === community.id
     );
     if (isSubscribed) {
       return <Button size="sm">unsubscribe</Button>;
     } else {
       return (
-        <Button size="sm" colorScheme="pink">
+        <Button
+          size="sm"
+          colorScheme="pink"
+          isLoading={isLoading}
+          onClick={() => {
+            subscribe(community.id);
+          }}
+        >
           subscribe
         </Button>
       );
@@ -56,7 +63,7 @@ export const CommunityBlock: React.FC<CommunityBlockProps> = ({
             <Text fontStyle="semibold" ml="sm">
               members
             </Text>
-            {isLoggedIn && <SubscribeButton />}
+            {user && <SubscribeButton />}
           </Stack>
         </Flex>
       </Flex>

@@ -5,6 +5,7 @@ import { isAuth } from "../validations";
 const router = Router();
 
 router.get("/", CommunityController.GetAllCommunities);
+router.post("/sub", isAuth, CommunityController.SubscribeToCommunity);
 router.post("/", isAuth, CommunityController.CreateCommunity);
 router.get("/:name", CommunityController.GetCommunity);
 router.patch("/:name", isAuth);

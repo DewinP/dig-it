@@ -11,8 +11,11 @@ class UserController {
     next: NextFunction
   ) => {
     try {
-      let subscription = await service.subscribeToCommunity(req.body);
-      res.json({ subscription });
+      let subscription = await service.subscribeToCommunity({
+        communityId: req.body.communityId,
+        userId: req.session.user!.id,
+      });
+      res.json(subscription);
     } catch (error) {
       next();
     }
@@ -24,7 +27,7 @@ class UserController {
   ) => {
     let user = await service.getUserByUsername(req.params.username);
     if (user) {
-      res.json({ user });
+      res.json(user);
     } else {
       next(
         new HttpExeception({

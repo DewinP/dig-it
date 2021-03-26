@@ -16,12 +16,21 @@ export interface IPost {
   createdAt: Date;
   updatedAt: Date;
 }
+export interface IUser {
+  id: string;
+  username: string;
+  email: string;
+  posts: IPost[];
+  subscriptions: ISubscription[];
+  createdAt: Date;
+}
 
 export interface ISubscription {
   id: string;
   userId: string;
   communityId: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface ILoginInput {
@@ -45,8 +54,8 @@ export interface ICommunity {
   name: string;
   description: string;
   avatar: string;
-  posts: IPost[] | number;
-  members: ISubscription[] | number;
+  posts: IPost[];
+  members: ISubscription[];
   hero_img: string;
   founderId: string;
   createdAt: Date;

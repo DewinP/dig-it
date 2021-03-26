@@ -7,6 +7,8 @@ import { Register } from "./features/user/Register";
 import { Account } from "./features/user/Account";
 import { Communities } from "./features/community/Communities";
 import { CreateCommunity } from "./features/community/CreateCommunity";
+import { CreatePost } from "./features/post/CreatePost";
+import { Post } from "./features/post/Post";
 
 function App() {
   return (
@@ -14,7 +16,9 @@ function App() {
       <Layout>
         <Switch>
           <Route path="/create-community" component={CreateCommunity} exact />
-          <Route path="/c/:communityName" component={Community} />
+          <Route path="/c/:communityName" component={Community} exact />
+          <Route path="/c/:communityName/submit" component={CreatePost} exact />
+          <Route path="/c/:communityName/:postTitle" component={Post} exact />
           <Route path="/login" component={Login} exact />
           <Route path="/c" component={Communities} exact />
           <Route path="/register" component={Register} exact />

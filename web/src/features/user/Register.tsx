@@ -1,16 +1,14 @@
 import { Stack, Flex, Heading, Button } from "@chakra-ui/react";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { Formik, Form } from "formik";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { useAppDispatch } from "../../app/hooks";
+import { useRegisterMutation } from "../../app/services/api";
 import { InputField } from "../../components/InputField";
 import { toErrorMap } from "../../helpers/toErrorMap";
 import { IRegisterInput } from "../../interfaces/interfaces";
-import { registerUser } from "./user.slice";
 
 export const Register: React.FC<{}> = () => {
-  const dispatch = useAppDispatch();
+  const [register] = useRegisterMutation();
   let history = useHistory();
   const initialValues: IRegisterInput = {
     username: "",
@@ -27,11 +25,12 @@ export const Register: React.FC<{}> = () => {
           initialValues={initialValues}
           onSubmit={async (values, { setErrors }) => {
             try {
-              const resultAction = await dispatch(registerUser(values));
-              unwrapResult(resultAction);
+              await register(values).unwrap();
               history.push("/login");
-            } catch (fieldError) {
-              setErrors(toErrorMap(fieldError));
+            } catch (error) {
+              if (error.status === 400) {
+                setErrors(toErrorMap(error.data));
+              }
             }
           }}
         >
