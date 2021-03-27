@@ -12,7 +12,7 @@ export interface IPostResponse {
   getCommunityPosts(communityId: string): Promise<Post[]>;
   getPostsByUser(username: string): Promise<Post[]>;
   getAllPosts(): Promise<Post[]>;
-  createPost(input: IPostInput): Promise<Post>;
+  createPost(input: IPostInput): Promise<string>;
 }
 
 export interface IAuthResponse {

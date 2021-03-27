@@ -18,7 +18,7 @@ export const CreatePost: React.FC<{}> = () => {
   const [createPost] = useCreatePostMutation();
   let { communityName } = useParams<RouteParams>();
   const { data, isLoading } = useCommunityQuery(communityName);
-  const initialValues = { title: "", body: "", communityId: "" };
+  const initialValues = { title: "", body: "" };
   if (isLoading) {
     return <div>...Loading</div>;
   } else
@@ -32,8 +32,11 @@ export const CreatePost: React.FC<{}> = () => {
             initialValues={initialValues}
             onSubmit={async (values, { setErrors }) => {
               try {
-                await createPost(values).unwrap();
-                history.goBack();
+                let post = await createPost({
+                  communityId: data!.id,
+                  ...values,
+                }).unwrap();
+                history.push(`${post.title}`);
               } catch (errors) {
                 if (errors.status === 400) {
                   setErrors(toErrorMap(errors.data));

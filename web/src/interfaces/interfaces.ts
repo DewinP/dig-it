@@ -16,6 +16,12 @@ export interface IPost {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IPostInput {
+  title: string;
+  body: string;
+  communityId: string;
+}
 export interface IMe {
   id: string;
   username: string;

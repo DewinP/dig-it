@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { getConnection, getRepository } from "typeorm";
 
 import { IPostInput } from "../../interfaces/interfaces";
 import { Post } from "../../models";
@@ -52,8 +52,14 @@ export class PostService implements IPostResponse {
       .getMany();
   }
 
-  async createPost(input: IPostInput): Promise<Post> {
-    let result = await getRepository(Post).save(input);
-    return result;
+  async createPost(input: IPostInput): Promise<string> {
+    let result = await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(Post)
+      .values(input)
+      .returning("title")
+      .execute();
+    return result.raw[0].title;
   }
 }

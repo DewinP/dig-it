@@ -5,6 +5,7 @@ import {
   ILoginInput,
   IMe,
   IPost,
+  IPostInput,
   IRegisterInput,
   ISubscription,
 } from "../../interfaces/interfaces";
@@ -30,7 +31,7 @@ export const api = createApi({
         provides: (returnValue, args) => [
           {
             type: "Community" as const,
-            id: returnValue.id,
+            id: returnValue.name,
           },
         ],
       }),
@@ -85,7 +86,7 @@ export const api = createApi({
         ],
       }),
       post: build.query<IPost, string>({
-        query: (name) => `posts/${name}`,
+        query: (title) => `posts/${title}`,
         provides: (_, args) => [
           {
             type: "Post" as const,
@@ -93,15 +94,15 @@ export const api = createApi({
           },
         ],
       }),
-      createPost: build.mutation<
-        IPost,
-        { title: string; body: string; communityId: string }
-      >({
+      createPost: build.mutation<IPost, IPostInput>({
         query: (input) => ({
           url: "posts/",
           method: "POST",
           body: input,
         }),
+        invalidates: (returnValue) => [
+          { type: "Community", id: returnValue.community.name },
+        ],
       }),
     };
   },

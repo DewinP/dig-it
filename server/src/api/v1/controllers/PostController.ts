@@ -45,14 +45,15 @@ class PostController {
     next: NextFunction
   ) => {
     try {
-      let createdPost = await service.createPost({
+      let createdPostTitle = await service.createPost({
         authorId: req.session.user!.id,
         communityId: req.body.communityId,
         title: req.body.title,
         body: req.body.body,
       });
-      console.log(createdPost);
-      res.json(createdPost);
+      let post = await service.getPostByTitle(createdPostTitle);
+      console.log(post);
+      res.json(post);
     } catch (error) {
       if (error.code === "23505") {
         next(
