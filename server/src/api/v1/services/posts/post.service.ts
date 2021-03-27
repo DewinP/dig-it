@@ -53,6 +53,7 @@ export class PostService implements IPostResponse {
   }
 
   async createPost(input: IPostInput): Promise<Post> {
-    return await getRepository(Post).save(input);
+    let result = await getRepository(Post).save(input);
+    return result;
   }
 }

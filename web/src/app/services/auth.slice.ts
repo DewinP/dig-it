@@ -1,15 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IUser } from "../../interfaces/interfaces";
+import { IMe } from "../../interfaces/interfaces";
 import { RootState } from "../store";
 import { api } from "./api";
 
 interface AuthState {
-  user: IUser;
-  isLoading: false;
+  user: IMe;
+  isFetching: boolean;
 }
 
 const initialState: AuthState = {
-  user: {} as IUser,
+  user: {} as IMe,
+  isFetching: true,
 };
 
 export const authSlice = createSlice({
@@ -27,8 +28,12 @@ export const authSlice = createSlice({
       api.endpoints.me.matchFulfilled,
       (state, { payload }) => {
         state.user = payload.result;
+        state.isFetching = false;
       }
     );
+    builder.addMatcher(api.endpoints.me.matchRejected, (state, { payload }) => {
+      state.isFetching = false;
+    });
     builder.addMatcher(
       api.endpoints.createPost.matchFulfilled,
       (state, { payload }) => {
@@ -45,6 +50,20 @@ export const authSlice = createSlice({
       api.endpoints.subscribe.matchFulfilled,
       (state, { payload }) => {
         state.user.subscriptions.push(payload.result);
+      }
+    );
+    builder.addMatcher(
+      api.endpoints.unsubscribe.matchFulfilled,
+      (state, { payload }) => {
+        state.user.subscriptions = state.user.subscriptions.filter((s) => {
+          return s.id !== payload.result;
+        });
+      }
+    );
+    builder.addMatcher(
+      api.endpoints.createPost.matchFulfilled,
+      (state, { payload }) => {
+        state.user.posts.push(payload.result);
       }
     );
   },

@@ -2139,6 +2139,14 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
+"@rtk-incubator/rtk-query@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@rtk-incubator/rtk-query/-/rtk-query-0.2.0.tgz#ec7cfb90e44268eb70ac8df6a7eb7208c315fed1"
+  integrity sha512-XuxYLHk7LS65I0gwXITS8B2MMzL2qOobr6Kj7TGLQcjHktKlL2JZ1Y871D9ikBHvTwKqpROPOXlBcL035XO9sg==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    immer ">=8.0.0"
+
 "@sheerun/mutationobserver-shim@^0.3.2":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@sheerun/mutationobserver-shim/-/mutationobserver-shim-0.3.3.tgz#5405ee8e444ed212db44e79351f0c70a582aae25"
@@ -6596,6 +6604,11 @@ immer@8.0.1, immer@^8.0.0:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/immer/-/immer-8.0.1.tgz#9c73db683e2b3975c424fb0572af5889877ae656"
   integrity sha512-aqXhGP7//Gui2+UrEtvxZxSquQVXTpZ7KDxfCcKAF3Vysvw0CViVaW9RZ1j1xlIYqaaaipBoqdqeibkc18PNvA==
+
+immer@>=8.0.0:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.1.tgz#1116368e051f9a0fd188c5136b6efb74ed69c57f"
+  integrity sha512-7CCw1DSgr8kKYXTYOI1qMM/f5qxT5vIVMeGLDCDX8CSxsggr1Sjdoha4OhsP0AZ1UvWbyZlILHvLjaynuu02Mg==
 
 import-cwd@^2.0.0:
   version "2.1.0"

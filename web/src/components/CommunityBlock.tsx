@@ -5,7 +5,10 @@ import { FaUserAstronaut } from "react-icons/fa";
 import { useAppSelector } from "../app/hooks";
 import { selectCurrentUser } from "../app/services/auth.slice";
 import { NavLink } from "react-router-dom";
-import { useSubscribeMutation } from "../app/services/api";
+import {
+  useSubscribeMutation,
+  useUnsubscribeMutation,
+} from "../app/services/api";
 
 interface CommunityBlockProps {
   community: ICommunity;
@@ -14,20 +17,35 @@ interface CommunityBlockProps {
 export const CommunityBlock: React.FC<CommunityBlockProps> = ({
   community,
 }) => {
-  const [subscribe, { isLoading }] = useSubscribeMutation();
+  const [subscribe, { isLoading: subscribeIsLoading }] = useSubscribeMutation();
+  const [
+    unsubscribe,
+    { isLoading: unsubscribeIsLoading },
+  ] = useUnsubscribeMutation();
+
   const { user } = useAppSelector(selectCurrentUser);
   const SubscribeButton = () => {
     let isSubscribed = user.subscriptions?.find(
       (subscription) => subscription.communityId === community.id
     );
     if (isSubscribed) {
-      return <Button size="sm">unsubscribe</Button>;
+      return (
+        <Button
+          size="sm"
+          isLoading={unsubscribeIsLoading}
+          onClick={() => {
+            unsubscribe(community.id);
+          }}
+        >
+          unsubscribe
+        </Button>
+      );
     } else {
       return (
         <Button
           size="sm"
           colorScheme="pink"
-          isLoading={isLoading}
+          isLoading={subscribeIsLoading}
           onClick={() => {
             subscribe(community.id);
           }}

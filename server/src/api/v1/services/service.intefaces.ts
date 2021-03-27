@@ -31,6 +31,10 @@ export interface IUserResponse {
 export interface ICommunityResponse {
   subscribeToCommunity(input: ISubscriptionInput): Promise<Community_User>;
   createCommunity(input: ICommunityInput): Promise<Community>;
+  unsubscribeFromCommunity(
+    communityId: string,
+    userId: string
+  ): Promise<string>;
   getCommunity(name: string): Promise<Community | undefined>;
   getAllCommunities(): Promise<Community[]>;
 }

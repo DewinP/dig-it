@@ -1,19 +1,18 @@
 import { createApi, fetchBaseQuery } from "@rtk-incubator/rtk-query";
-import { Community } from "../../features/community/Community";
 import {
   ICommunity,
   ICommunityInput,
   ILoginInput,
+  IMe,
   IPost,
   IRegisterInput,
   ISubscription,
-  IUser,
 } from "../../interfaces/interfaces";
 
 export const api = createApi({
   reducerPath: "apiPath",
   baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
-  entityTypes: ["Community", "Me", "Post"],
+  entityTypes: ["Community", "Me", "Post", "User"],
   endpoints: (build) => {
     return {
       communities: build.query<ICommunity[], void>({
@@ -49,9 +48,17 @@ export const api = createApi({
           method: "POST",
           body: { communityId },
         }),
-        invalidates: (returnValue) => [{ type: "Community", id: 1 }],
+        invalidates: (_) => [{ type: "Community", id: 1 }],
       }),
-      login: build.mutation<IUser, ILoginInput>({
+      unsubscribe: build.mutation<string, string>({
+        query: (communityId) => ({
+          url: "c/unsub",
+          method: "POST",
+          body: { communityId },
+        }),
+        invalidates: () => [{ type: "Community", id: 1 }],
+      }),
+      login: build.mutation<IMe, ILoginInput>({
         query: (input) => ({
           url: "auth/login",
           method: "POST",
@@ -65,8 +72,17 @@ export const api = createApi({
           body: input,
         }),
       }),
-      me: build.query<IUser, void>({
+      me: build.query<IMe, void>({
         query: () => "auth/me",
+      }),
+      user: build.query<IPost, string>({
+        query: (name) => `posts/${name}`,
+        provides: (_, args) => [
+          {
+            type: "User" as const,
+            id: args,
+          },
+        ],
       }),
       post: build.query<IPost, string>({
         query: (name) => `posts/${name}`,
@@ -96,9 +112,11 @@ export const {
   useCreateCommunityMutation,
   useCommunitiesQuery,
   useSubscribeMutation,
+  useUnsubscribeMutation,
   useLoginMutation,
   useRegisterMutation,
   useMeQuery,
+  useUserQuery,
   usePostQuery,
   useCreatePostMutation,
 } = api;

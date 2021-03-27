@@ -22,6 +22,22 @@ class CommunityController {
     }
   };
 
+  public static UnsubscribeFromCommunity = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      let deletedSub = await service.unsubscribeFromCommunity(
+        req.body.communityId,
+        req.session.user!.id
+      );
+      res.json(deletedSub);
+    } catch (error) {
+      next();
+    }
+  };
+
   public static CreateCommunity = async (
     req: Request,
     res: Response,

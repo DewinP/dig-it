@@ -16,12 +16,20 @@ export interface IPost {
   createdAt: Date;
   updatedAt: Date;
 }
-export interface IUser {
+export interface IMe {
   id: string;
   username: string;
   email: string;
   posts: IPost[];
   subscriptions: ISubscription[];
+  createdAt: Date;
+}
+
+export interface IUser {
+  id: string;
+  username: string;
+  avatar: string;
+  posts: IPost[];
   createdAt: Date;
 }
 
