@@ -8,6 +8,7 @@ import {
   IPostInput,
   IRegisterInput,
   ISubscription,
+  IUser,
 } from "../../interfaces/interfaces";
 
 export const api = createApi({
@@ -28,7 +29,7 @@ export const api = createApi({
       }),
       community: build.query<ICommunity, string>({
         query: (name) => `c/${name}`,
-        provides: (returnValue, args) => [
+        provides: (returnValue) => [
           {
             type: "Community" as const,
             id: returnValue.name,
@@ -76,8 +77,14 @@ export const api = createApi({
       me: build.query<IMe, void>({
         query: () => "auth/me",
       }),
-      user: build.query<IPost, string>({
-        query: (name) => `posts/${name}`,
+      logout: build.mutation<{}, void>({
+        query: () => ({
+          url: "auth/logout",
+          method: "DELETE",
+        }),
+      }),
+      user: build.query<IUser, string>({
+        query: (name) => `users/${name}`,
         provides: (_, args) => [
           {
             type: "User" as const,
@@ -117,6 +124,7 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useMeQuery,
+  useLogoutMutation,
   useUserQuery,
   usePostQuery,
   useCreatePostMutation,

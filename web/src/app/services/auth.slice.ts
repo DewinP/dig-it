@@ -6,11 +6,13 @@ import { api } from "./api";
 interface AuthState {
   user: IMe;
   isFetching: boolean;
+  isLoggedIn: boolean;
 }
 
 const initialState: AuthState = {
   user: {} as IMe,
   isFetching: true,
+  isLoggedIn: false,
 };
 
 export const authSlice = createSlice({
@@ -22,6 +24,7 @@ export const authSlice = createSlice({
       api.endpoints.login.matchFulfilled,
       (state, { payload }) => {
         state.user = payload.result;
+        state.isLoggedIn = true;
       }
     );
     builder.addMatcher(
@@ -29,10 +32,15 @@ export const authSlice = createSlice({
       (state, { payload }) => {
         state.user = payload.result;
         state.isFetching = false;
+        state.isLoggedIn = true;
       }
     );
-    builder.addMatcher(api.endpoints.me.matchRejected, (state, { payload }) => {
+    builder.addMatcher(api.endpoints.me.matchRejected, (state) => {
       state.isFetching = false;
+    });
+    builder.addMatcher(api.endpoints.logout.matchFulfilled, (state) => {
+      state.user = {} as IMe;
+      state.isLoggedIn = false;
     });
     builder.addMatcher(
       api.endpoints.createPost.matchFulfilled,

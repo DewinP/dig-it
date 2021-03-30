@@ -1,7 +1,5 @@
 import {
   Heading,
-  Image,
-  ImageProps,
   keyframes,
   Stack,
   usePrefersReducedMotion,
@@ -11,7 +9,7 @@ const spin = keyframes`
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 `;
-export const LoadingLogo: React.FC<{}> = ({}) => {
+export const LoadingLogo: React.FC<{}> = () => {
   const prefersReducedMotion = usePrefersReducedMotion();
   const animation = prefersReducedMotion
     ? undefined

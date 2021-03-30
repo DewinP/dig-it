@@ -1,7 +1,19 @@
-import { Flex, Stack, Text, Button, Skeleton } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import {
+  Flex,
+  Stack,
+  Text,
+  Button,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  useToast,
+} from "@chakra-ui/react";
+import React from "react";
 import { ICommunity } from "../interfaces/interfaces";
-import { FaUserAstronaut } from "react-icons/fa";
+
 import { useAppSelector } from "../app/hooks";
 import { selectCurrentUser } from "../app/services/auth.slice";
 import { NavLink } from "react-router-dom";
@@ -17,28 +29,77 @@ interface CommunityBlockProps {
 export const CommunityBlock: React.FC<CommunityBlockProps> = ({
   community,
 }) => {
-  const [subscribe, { isLoading: subscribeIsLoading }] = useSubscribeMutation();
+  const { user } = useAppSelector(selectCurrentUser);
+
+  const [
+    subscribe,
+    { isLoading: subscribeIsLoading, isSuccess },
+  ] = useSubscribeMutation();
   const [
     unsubscribe,
     { isLoading: unsubscribeIsLoading },
   ] = useUnsubscribeMutation();
-
-  const { user } = useAppSelector(selectCurrentUser);
+  const toast = useToast();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const onClose = () => setIsOpen(false);
+  const cancelRef = React.useRef(null);
   const SubscribeButton = () => {
     let isSubscribed = user.subscriptions?.find(
       (subscription) => subscription.communityId === community.id
     );
     if (isSubscribed) {
       return (
-        <Button
-          size="sm"
-          isLoading={unsubscribeIsLoading}
-          onClick={() => {
-            unsubscribe(community.id);
-          }}
-        >
-          unsubscribe
-        </Button>
+        <>
+          <Button
+            size="sm"
+            isLoading={unsubscribeIsLoading}
+            variant="ghost"
+            onClick={() => setIsOpen(true)}
+          >
+            subscribed
+          </Button>
+          <AlertDialog
+            isOpen={isOpen}
+            leastDestructiveRef={cancelRef}
+            onClose={onClose}
+          >
+            <AlertDialogOverlay>
+              <AlertDialogContent>
+                <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                  unsubscribe
+                </AlertDialogHeader>
+                <AlertDialogBody>
+                  Unsubscribe from {community.name}?
+                </AlertDialogBody>
+                <AlertDialogFooter>
+                  <Button ref={cancelRef} onClick={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    colorScheme="red"
+                    type="submit"
+                    onClick={() =>
+                      unsubscribe(community.id)
+                        .unwrap()
+                        .then(() => {
+                          toast({
+                            title: `left ${community.name.toUpperCase()}`,
+                            status: "info",
+                            isClosable: true,
+                            duration: 3000,
+                          });
+                          onClose();
+                        })
+                    }
+                    ml={3}
+                  >
+                    Unsubscribe
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialogOverlay>
+          </AlertDialog>
+        </>
       );
     } else {
       return (
@@ -47,7 +108,16 @@ export const CommunityBlock: React.FC<CommunityBlockProps> = ({
           colorScheme="pink"
           isLoading={subscribeIsLoading}
           onClick={() => {
-            subscribe(community.id);
+            subscribe(community.id)
+              .unwrap()
+              .then(() =>
+                toast({
+                  title: `Subscribed to ${community.name.toUpperCase()}`,
+                  status: "success",
+                  isClosable: true,
+                  duration: 2000,
+                })
+              );
           }}
         >
           subscribe
@@ -73,14 +143,7 @@ export const CommunityBlock: React.FC<CommunityBlockProps> = ({
       </Stack>
       <Flex>
         <Flex justify="center" align="center">
-          <Stack spacing={0} justify="center" align="center">
-            <Flex align="center">
-              <FaUserAstronaut />
-              <Text ml="5px">{community.members}</Text>
-            </Flex>
-            <Text fontStyle="semibold" ml="sm">
-              members
-            </Text>
+          <Stack spacing={0} maxW="100px" justify="center" align="center">
             {user && <SubscribeButton />}
           </Stack>
         </Flex>

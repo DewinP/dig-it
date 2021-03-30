@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Community } from "./features/community/Community";
 import {
   BrowserRouter as Router,
@@ -20,11 +20,11 @@ import { useAppSelector } from "./app/hooks";
 import { selectCurrentUser } from "./app/services/auth.slice";
 import { useMeQuery } from "./app/services/api";
 import { LoadingLogo } from "./components/LoadingLogo";
+import { Home } from "./features/user/Home";
 
-type ProtectedRouteProps = { userId: string } & RouteProps;
-
-function ProtectedRoute({ userId, ...routeProps }: ProtectedRouteProps) {
-  if (userId) {
+function ProtectedRoute({ ...routeProps }: RouteProps) {
+  let { isLoggedIn } = useAppSelector(selectCurrentUser);
+  if (isLoggedIn) {
     return <Route {...routeProps} />;
   } else {
     return <Redirect to="/login" />;
@@ -41,29 +41,29 @@ function App() {
   } else
     return (
       <Router>
-        <Layout>
-          <Switch>
-            <Route path="/create-community" component={CreateCommunity} exact />
-            <Route path="/c" component={Communities} exact />
-            <Route path="/c/:communityName" component={Community} exact />
-            <Route
-              path="/c/:communityName/submit"
-              component={CreatePost}
-              exact
-            />
-            <Route path="/c/:communityName/:postTitle" component={Post} exact />
-            <Route path="/c/:communityName/:postTitle" component={Post} exact />
-            <Route path="/u/:username" component={Profile} exact />
-            <Route path="/login" component={Login} exact />
-            <Route path="/register" component={Register} exact />
-            <ProtectedRoute
-              userId={user.id}
-              path="/account"
-              component={Account}
-              exact
-            />
-          </Switch>
-        </Layout>
+        <Switch>
+          {/* Public routes */}
+          <Route path="/" component={Home} exact />
+          <Route path="/c" component={Communities} exact />
+          <Route path="/c/:communityName" component={Community} exact />
+          <Route path="/c/:communityName/:postTitle" component={Post} exact />
+          <Route path="/u/:username" component={Profile} exact />
+          <Route path="/login" component={Login} exact />
+          <Route path="/register" component={Register} exact />
+
+          {/* Private routes */}
+          <ProtectedRoute
+            path="/create-community"
+            component={CreateCommunity}
+            exact
+          />
+          <ProtectedRoute
+            path="/c/:communityName/submit"
+            component={CreatePost}
+            exact
+          />
+          <ProtectedRoute path="/account" component={Account} exact />
+        </Switch>
       </Router>
     );
 }
