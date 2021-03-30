@@ -46,9 +46,6 @@ export const Navbar: React.FC<{}> = () => {
               <NavLink to="/c">
                 <Text mr="20px">Communities</Text>
               </NavLink>
-              <NavLink to={`/u/${user.username}`}>
-                <Text mr="20px">Profile</Text>
-              </NavLink>
               <Menu>
                 <MenuButton
                   p="0"
@@ -60,6 +57,9 @@ export const Navbar: React.FC<{}> = () => {
                   {user.username}
                 </MenuButton>
                 <MenuList>
+                  <MenuItem as={Link} to={`/u/${user.username}`}>
+                    Profile
+                  </MenuItem>
                   <MenuItem as={Link} to="/account">
                     Settings
                   </MenuItem>

@@ -10,11 +10,11 @@ import {
 import { Layout } from "./components/Layout";
 import { Login } from "./features/user/Login";
 import { Register } from "./features/user/Register";
-import { Account } from "./features/user/Account";
+import { AccountSettings } from "./features/user/AccountSettings";
 import { Communities } from "./features/community/Communities";
 import { CreateCommunity } from "./features/community/CreateCommunity";
 import { CreatePost } from "./features/post/CreatePost";
-import { Post } from "./features/post/Post";
+import { PostPage } from "./features/post/PostPage";
 import { Profile } from "./features/user/Profile";
 import { useAppSelector } from "./app/hooks";
 import { selectCurrentUser } from "./app/services/auth.slice";
@@ -46,7 +46,11 @@ function App() {
           <Route path="/" component={Home} exact />
           <Route path="/c" component={Communities} exact />
           <Route path="/c/:communityName" component={Community} exact />
-          <Route path="/c/:communityName/:postTitle" component={Post} exact />
+          <Route
+            path="/c/:communityName/:postTitle"
+            component={PostPage}
+            exact
+          />
           <Route path="/u/:username" component={Profile} exact />
           <Route path="/login" component={Login} exact />
           <Route path="/register" component={Register} exact />
@@ -62,7 +66,7 @@ function App() {
             component={CreatePost}
             exact
           />
-          <ProtectedRoute path="/account" component={Account} exact />
+          <ProtectedRoute path="/account" component={AccountSettings} exact />
         </Switch>
       </Router>
     );
