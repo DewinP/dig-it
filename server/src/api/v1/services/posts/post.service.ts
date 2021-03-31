@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { getConnection, getRepository } from "typeorm";
 
 import { IPostInput } from "../../interfaces/interfaces";
 import { Post } from "../../models";
@@ -22,7 +22,7 @@ export class PostService implements IPostResponse {
       .createQueryBuilder("posts")
       .leftJoinAndSelect("posts.author", "author")
       .leftJoinAndSelect("posts.community", "community")
-      .select(["posts"])
+      .select("posts")
       .addSelect(["author.id", "author.username", "author.avatar"])
       .addSelect(["community.id", "community.name"])
       .where("community.id = :communityId", { communityId: communityId })
@@ -34,7 +34,7 @@ export class PostService implements IPostResponse {
       .createQueryBuilder("posts")
       .leftJoinAndSelect("posts.author", "author")
       .leftJoinAndSelect("posts.community", "community")
-      .select(["posts"])
+      .select("posts")
       .addSelect(["author.id", "author.username", "author.avatar"])
       .addSelect(["community.id", "community.name"])
       .where("author.username = :username", { username: username })
@@ -52,7 +52,14 @@ export class PostService implements IPostResponse {
       .getMany();
   }
 
-  async createPost(input: IPostInput): Promise<Post> {
-    return await getRepository(Post).save(input);
+  async createPost(input: IPostInput): Promise<string> {
+    let result = await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(Post)
+      .values(input)
+      .returning("title")
+      .execute();
+    return result.raw[0].title;
   }
 }

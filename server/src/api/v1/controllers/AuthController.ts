@@ -6,6 +6,7 @@ import { UserService } from "../services/users/users.service";
 import { loginValidation } from "../validations/";
 import { IUserMe } from "../interfaces/interfaces";
 import argon2 from "argon2";
+import { COOKIE_NAME } from "../../../config/constants";
 
 const service = new UserService();
 class AuthController {
@@ -100,6 +101,21 @@ class AuthController {
       let user = await service.getMe(req.session.user.username);
       res.json(user);
     }
+  };
+
+  public static Logout = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    req.session.destroy((err) => {
+      res.clearCookie(COOKIE_NAME);
+      if (err) {
+        next(new HttpExeception({ statusCode: httpCode.SERVER_ERROR }));
+        return;
+      }
+      res.json(httpCode.SUCCESS_NO_CONTENT);
+    });
   };
 }
 

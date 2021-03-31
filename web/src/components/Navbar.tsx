@@ -1,13 +1,25 @@
-import { Flex, Heading, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Heading,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+} from "@chakra-ui/react";
 import React, { Fragment } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import { useAppSelector } from "../app/hooks";
-import { useMeQuery } from "../app/services/api";
+import { useLogoutMutation, useMeQuery } from "../app/services/api";
 import { selectCurrentUser } from "../app/services/auth.slice";
+import { BsFillCaretDownFill } from "react-icons/bs";
 
 export const Navbar: React.FC<{}> = () => {
-  let { isLoading } = useMeQuery();
-  let { user } = useAppSelector(selectCurrentUser);
+  // let { isLoading } = useMeQuery();
+  let { user, isLoggedIn } = useAppSelector(selectCurrentUser);
+  let [logout] = useLogoutMutation();
+  let history = useHistory();
   return (
     <Fragment>
       <Flex
@@ -26,7 +38,7 @@ export const Navbar: React.FC<{}> = () => {
           </NavLink>
         </Flex>
         <Flex>
-          {user.id && !isLoading && (
+          {isLoggedIn && (
             <Flex>
               <NavLink to="/create-community">
                 <Text mr="20px">Create community</Text>
@@ -34,20 +46,43 @@ export const Navbar: React.FC<{}> = () => {
               <NavLink to="/c">
                 <Text mr="20px">Communities</Text>
               </NavLink>
-              <NavLink to="/account">
-                <Text mr="20px">Account</Text>
-              </NavLink>
-              <Text>{user.username}</Text>
+              <Menu>
+                <MenuButton
+                  p="0"
+                  as={Button}
+                  variant="link"
+                  fontWeight="bold"
+                  rightIcon={<BsFillCaretDownFill />}
+                >
+                  {user.username}
+                </MenuButton>
+                <MenuList>
+                  <MenuItem as={Link} to={`/u/${user.username}`}>
+                    Profile
+                  </MenuItem>
+                  <MenuItem as={Link} to="/account">
+                    Settings
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      logout();
+                      history.push("/");
+                    }}
+                  >
+                    Logout
+                  </MenuItem>
+                </MenuList>
+              </Menu>
             </Flex>
           )}
-          {!isLoading && !user.id && (
+          {!isLoggedIn && (
             <Fragment>
-              <NavLink to="/login">
-                <Text mr="20px">Login</Text>
-              </NavLink>
-              <NavLink to="/register">
-                <Text>Register</Text>
-              </NavLink>
+              <Text as={Link} to="/login" mr="20px">
+                Login
+              </Text>
+              <Text as={Link} to="/register">
+                Register
+              </Text>
             </Fragment>
           )}
         </Flex>

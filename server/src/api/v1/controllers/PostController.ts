@@ -36,7 +36,7 @@ class PostController {
 
   public static GetPostByUser = async (req: Request, res: Response) => {
     let posts = await service.getPostsByUser(req.params.username);
-    res.json({ posts });
+    res.json(posts);
   };
 
   public static CreatePost = async (
@@ -45,8 +45,15 @@ class PostController {
     next: NextFunction
   ) => {
     try {
-      await service.createPost(req.body);
-      res.sendStatus(httpCode.SUCCESS_NO_CONTENT);
+      let createdPostTitle = await service.createPost({
+        authorId: req.session.user!.id,
+        communityId: req.body.communityId,
+        title: req.body.title,
+        body: req.body.body,
+      });
+      let post = await service.getPostByTitle(createdPostTitle);
+      console.log(post);
+      res.json(post);
     } catch (error) {
       if (error.code === "23505") {
         next(

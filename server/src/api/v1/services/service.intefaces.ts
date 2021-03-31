@@ -12,7 +12,7 @@ export interface IPostResponse {
   getCommunityPosts(communityId: string): Promise<Post[]>;
   getPostsByUser(username: string): Promise<Post[]>;
   getAllPosts(): Promise<Post[]>;
-  createPost(input: IPostInput): Promise<Post>;
+  createPost(input: IPostInput): Promise<string>;
 }
 
 export interface IAuthResponse {
@@ -31,6 +31,10 @@ export interface IUserResponse {
 export interface ICommunityResponse {
   subscribeToCommunity(input: ISubscriptionInput): Promise<Community_User>;
   createCommunity(input: ICommunityInput): Promise<Community>;
+  unsubscribeFromCommunity(
+    communityId: string,
+    userId: string
+  ): Promise<string>;
   getCommunity(name: string): Promise<Community | undefined>;
   getAllCommunities(): Promise<Community[]>;
 }

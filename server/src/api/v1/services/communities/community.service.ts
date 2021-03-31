@@ -11,6 +11,20 @@ export class CommunityService implements ICommunityResponse {
   ): Promise<Community_User> {
     return await getRepository(Community_User).save(input);
   }
+  async unsubscribeFromCommunity(
+    communityId: string,
+    userId: string
+  ): Promise<string> {
+    let result = await getRepository(Community_User)
+      .createQueryBuilder()
+      .delete()
+      .from(Community_User)
+      .where("userId = :userId", { userId: userId })
+      .andWhere("communityId = :communityId", { communityId: communityId })
+      .returning("id")
+      .execute();
+    return result.raw[0].id;
+  }
   async createCommunity(input: ICommunityInput): Promise<Community> {
     return await getRepository(Community).save(input);
   }

@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@rtk-incubator/rtk-query";
-import { Community } from "../../features/community/Community";
 import {
   ICommunity,
   ICommunityInput,
   ILoginInput,
+  IMe,
   IPost,
+  IPostInput,
   IRegisterInput,
   ISubscription,
   IUser,
@@ -13,7 +14,7 @@ import {
 export const api = createApi({
   reducerPath: "apiPath",
   baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
-  entityTypes: ["Community", "Me", "Post"],
+  entityTypes: ["Community", "Me", "Post", "User"],
   endpoints: (build) => {
     return {
       communities: build.query<ICommunity[], void>({
@@ -28,10 +29,10 @@ export const api = createApi({
       }),
       community: build.query<ICommunity, string>({
         query: (name) => `c/${name}`,
-        provides: (returnValue, args) => [
+        provides: (returnValue) => [
           {
             type: "Community" as const,
-            id: returnValue.id,
+            id: returnValue.name,
           },
         ],
       }),
@@ -49,9 +50,17 @@ export const api = createApi({
           method: "POST",
           body: { communityId },
         }),
-        invalidates: (returnValue) => [{ type: "Community", id: 1 }],
+        invalidates: (_) => [{ type: "Community", id: 1 }],
       }),
-      login: build.mutation<IUser, ILoginInput>({
+      unsubscribe: build.mutation<string, string>({
+        query: (communityId) => ({
+          url: "c/unsub",
+          method: "POST",
+          body: { communityId },
+        }),
+        invalidates: () => [{ type: "Community", id: 1 }],
+      }),
+      login: build.mutation<IMe, ILoginInput>({
         query: (input) => ({
           url: "auth/login",
           method: "POST",
@@ -65,11 +74,26 @@ export const api = createApi({
           body: input,
         }),
       }),
-      me: build.query<IUser, void>({
+      me: build.query<IMe, void>({
         query: () => "auth/me",
       }),
+      logout: build.mutation<{}, void>({
+        query: () => ({
+          url: "auth/logout",
+          method: "DELETE",
+        }),
+      }),
+      user: build.query<IUser, string>({
+        query: (name) => `users/${name}`,
+        provides: (_, args) => [
+          {
+            type: "User" as const,
+            id: args,
+          },
+        ],
+      }),
       post: build.query<IPost, string>({
-        query: (name) => `posts/${name}`,
+        query: (title) => `posts/${title}`,
         provides: (_, args) => [
           {
             type: "Post" as const,
@@ -77,15 +101,25 @@ export const api = createApi({
           },
         ],
       }),
-      createPost: build.mutation<
-        IPost,
-        { title: string; body: string; communityId: string }
-      >({
+      userPost: build.query<IPost[], string>({
+        query: (username) => `posts/user/${username}`,
+        provides: (returnValue) => [
+          { type: "Post" as const, id: returnValue[0].author.id },
+          ...returnValue.map((p) => ({
+            type: "Post" as const,
+            id: p.id,
+          })),
+        ],
+      }),
+      createPost: build.mutation<IPost, IPostInput>({
         query: (input) => ({
           url: "posts/",
           method: "POST",
           body: input,
         }),
+        invalidates: (returnValue) => [
+          { type: "Community", id: returnValue.community.name },
+        ],
       }),
     };
   },
@@ -96,9 +130,13 @@ export const {
   useCreateCommunityMutation,
   useCommunitiesQuery,
   useSubscribeMutation,
+  useUnsubscribeMutation,
   useLoginMutation,
   useRegisterMutation,
   useMeQuery,
+  useLogoutMutation,
+  useUserQuery,
   usePostQuery,
   useCreatePostMutation,
+  useUserPostQuery,
 } = api;

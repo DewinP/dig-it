@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { CommunityMenu } from "../../components/CommunityMenu";
 import { CommunityPost } from "../../components/CommunityPost";
 import { useCommunityQuery } from "../../app/services/api";
+import { Layout } from "../../components/Layout";
 
 interface RouteParams {
   communityName: string;
@@ -11,6 +12,7 @@ interface RouteParams {
 export const Community: React.FC<{}> = () => {
   let { communityName } = useParams<RouteParams>();
   const { data, isLoading, isError } = useCommunityQuery(communityName);
+  console.log(data);
   if (isLoading) {
     return <div>loading...</div>;
   }
@@ -18,13 +20,15 @@ export const Community: React.FC<{}> = () => {
     return <div>Error</div>;
   }
   return (
-    <Stack>
-      <CommunityMenu communityName={communityName} />
-      {data?.posts.map((p) => {
-        return (
-          <CommunityPost key={p.id} communityName={communityName} post={p} />
-        );
-      })}
-    </Stack>
+    <Layout>
+      <Stack>
+        <CommunityMenu communityName={communityName} />
+        {data?.posts.map((p) => {
+          return (
+            <CommunityPost key={p.id} communityName={communityName} post={p} />
+          );
+        })}
+      </Stack>
+    </Layout>
   );
 };
