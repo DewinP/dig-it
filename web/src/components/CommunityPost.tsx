@@ -1,6 +1,6 @@
 import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { IPost } from "../interfaces/interfaces";
 
 interface CommunityPostProps {
@@ -20,15 +20,20 @@ export const CommunityPost: React.FC<CommunityPostProps> = ({
       padding="10px"
     >
       <Flex justify="space-between" align="center">
-        <Box>
-          <NavLink to={`${communityName}/${post.title}`}>
-            <Text fontSize="xl" fontWeight="semibold">
-              {post.title}
-            </Text>
-          </NavLink>
-          <Text fontSize="xs">by u/{post.author.username}</Text>
-        </Box>
-        <Text fontSize="xs">Place holder date</Text>
+        <Stack>
+          <Text
+            as={Link}
+            to={`${communityName}/${post.title}`}
+            fontSize="xl"
+            fontWeight="semibold"
+          >
+            {post.title}
+          </Text>
+          <Text as={Link} to={`/u/${post.author.username}`} fontSize="xs">
+            by u/{post.author.username}
+          </Text>
+        </Stack>
+        <Text fontSize="xs">{post.createdAt}</Text>
       </Flex>
       <Box>
         <Text fontWeight="semibold">{post.body}</Text>

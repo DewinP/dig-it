@@ -101,6 +101,16 @@ export const api = createApi({
           },
         ],
       }),
+      userPost: build.query<IPost[], string>({
+        query: (username) => `posts/user/${username}`,
+        provides: (returnValue) => [
+          { type: "Post" as const, id: returnValue[0].author.id },
+          ...returnValue.map((p) => ({
+            type: "Post" as const,
+            id: p.id,
+          })),
+        ],
+      }),
       createPost: build.mutation<IPost, IPostInput>({
         query: (input) => ({
           url: "posts/",
@@ -128,4 +138,5 @@ export const {
   useUserQuery,
   usePostQuery,
   useCreatePostMutation,
+  useUserPostQuery,
 } = api;

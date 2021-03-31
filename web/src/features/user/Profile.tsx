@@ -3,7 +3,7 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
-import { useUserQuery } from "../../app/services/api";
+import { useUserPostQuery, useUserQuery } from "../../app/services/api";
 import { selectCurrentUser } from "../../app/services/auth.slice";
 import { Layout } from "../../components/Layout";
 import { Post } from "../../components/Post";
@@ -14,8 +14,16 @@ interface RouteParams {
 
 export const Profile: React.FC<{}> = () => {
   let { username } = useParams<RouteParams>();
-  const { data, isLoading, isError } = useUserQuery(username);
-  if (isLoading) {
+  console.log("username:", username);
+  const { data: userData, isLoading: userIsLoading, isError } = useUserQuery(
+    username
+  );
+  const { data: userPosts, isLoading: postsIsLoading } = useUserPostQuery(
+    username
+  );
+  console.log(userPosts);
+
+  if (userIsLoading) {
     return <div>Loading</div>;
   }
   if (isError) {
@@ -34,7 +42,9 @@ export const Profile: React.FC<{}> = () => {
             <p>Will show latest posts and messages</p>
           </TabPanel>
           <TabPanel>
-            <p>Post will go here</p>
+            {userPosts?.map((p) => {
+              return <Post key={p.id} postData={p} />;
+            })}
           </TabPanel>
           <TabPanel>
             <p>all comments</p>

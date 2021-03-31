@@ -16,7 +16,7 @@ import { ICommunity } from "../interfaces/interfaces";
 
 import { useAppSelector } from "../app/hooks";
 import { selectCurrentUser } from "../app/services/auth.slice";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import {
   useSubscribeMutation,
   useUnsubscribeMutation,
@@ -134,11 +134,15 @@ export const CommunityBlock: React.FC<CommunityBlockProps> = ({
       p="10px"
     >
       <Stack>
-        <NavLink to={`/c/${community.name}`}>
-          <Text fontSize="18px" fontWeight="semibold">
-            {community.name}
-          </Text>
-        </NavLink>
+        <Text
+          fontSize="18px"
+          as={Link}
+          to={`/c/${community.name}`}
+          fontWeight="semibold"
+        >
+          c/{community.name}
+        </Text>
+
         <Text fontSize="15px">{community.description}</Text>
       </Stack>
       <Flex>

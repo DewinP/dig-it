@@ -16,8 +16,8 @@ import { selectCurrentUser } from "../app/services/auth.slice";
 import { BsFillCaretDownFill } from "react-icons/bs";
 
 export const Navbar: React.FC<{}> = () => {
-  let { isLoading } = useMeQuery();
-  let { user } = useAppSelector(selectCurrentUser);
+  // let { isLoading } = useMeQuery();
+  let { user, isLoggedIn } = useAppSelector(selectCurrentUser);
   let [logout] = useLogoutMutation();
   let history = useHistory();
   return (
@@ -38,7 +38,7 @@ export const Navbar: React.FC<{}> = () => {
           </NavLink>
         </Flex>
         <Flex>
-          {user.id && !isLoading && (
+          {isLoggedIn && (
             <Flex>
               <NavLink to="/create-community">
                 <Text mr="20px">Create community</Text>
@@ -75,7 +75,7 @@ export const Navbar: React.FC<{}> = () => {
               </Menu>
             </Flex>
           )}
-          {!isLoading && !user.id && (
+          {!isLoggedIn && (
             <Fragment>
               <Text as={Link} to="/login" mr="20px">
                 Login

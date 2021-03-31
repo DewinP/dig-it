@@ -19,7 +19,6 @@ export const PostPage: React.FC<{}> = () => {
   let { postTitle } = useParams<RouteParams>();
   let history = useHistory();
   const { data, isLoading, isError } = usePostQuery(postTitle);
-  console.log("==============", data);
   if (isLoading) {
     return <div>loading...</div>;
   }

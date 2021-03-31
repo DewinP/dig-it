@@ -42,19 +42,6 @@ function App() {
     return (
       <Router>
         <Switch>
-          {/* Public routes */}
-          <Route path="/" component={Home} exact />
-          <Route path="/c" component={Communities} exact />
-          <Route path="/c/:communityName" component={Community} exact />
-          <Route
-            path="/c/:communityName/:postTitle"
-            component={PostPage}
-            exact
-          />
-          <Route path="/u/:username" component={Profile} exact />
-          <Route path="/login" component={Login} exact />
-          <Route path="/register" component={Register} exact />
-
           {/* Private routes */}
           <ProtectedRoute
             path="/create-community"
@@ -67,6 +54,14 @@ function App() {
             exact
           />
           <ProtectedRoute path="/account" component={AccountSettings} exact />
+          {/* Public routes */}
+          <Route path="/" component={Home} exact />
+          <Route path="/c" component={Communities} exact />
+          <Route path="/c/:communityName" component={Community} exact />
+          <Route path="/c/:communityName/:postTitle" component={PostPage} />
+          <Route path="/u/:username" component={Profile} exact />
+          <Route path="/login" component={Login} exact />
+          <Route path="/register" component={Register} exact />
         </Switch>
       </Router>
     );

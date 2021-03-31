@@ -18,9 +18,6 @@ export class UserService implements IUserResponse {
   async getUserByUsername(username: string): Promise<User | undefined> {
     return await getRepository(User)
       .createQueryBuilder("user")
-      .leftJoinAndSelect("user.posts", "posts")
-      .leftJoinAndSelect("user.subscriptions", "subscriptions")
-      .select(["user", "posts"])
       .where("user.username = :username", { username: username })
       .getOne();
   }

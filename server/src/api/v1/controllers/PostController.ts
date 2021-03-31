@@ -36,7 +36,7 @@ class PostController {
 
   public static GetPostByUser = async (req: Request, res: Response) => {
     let posts = await service.getPostsByUser(req.params.username);
-    res.json({ posts });
+    res.json(posts);
   };
 
   public static CreatePost = async (
