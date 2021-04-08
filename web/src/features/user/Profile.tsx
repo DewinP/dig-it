@@ -3,7 +3,7 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
-import { useUserPostQuery, useUserQuery } from "../../app/services/api";
+import { useUserPostsQuery, useUserQuery } from "../../app/services/api";
 import { selectCurrentUser } from "../../app/services/auth.slice";
 import { Layout } from "../../components/Layout";
 import { Post } from "../../components/Post";
@@ -18,7 +18,7 @@ export const Profile: React.FC<{}> = () => {
   const { data: userData, isLoading: userIsLoading, isError } = useUserQuery(
     username
   );
-  const { data: userPosts, isLoading: postsIsLoading } = useUserPostQuery(
+  const { data: userPosts, isLoading: postsIsLoading } = useUserPostsQuery(
     username
   );
   console.log(userPosts);

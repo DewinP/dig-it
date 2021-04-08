@@ -24,7 +24,7 @@ export const Post: React.FC<PostProps> = ({
           </Flex>
           <Text
             as={Link}
-            to={`${postData.community.name}/${postData.title}`}
+            to={`/c/${postData.community.name}/${postData.title}`}
             fontSize="xl"
             fontWeight="semibold"
           >

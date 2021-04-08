@@ -37,6 +37,9 @@ export class Community extends BaseEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
+  @Column({ nullable: true })
+  isSubscribed: boolean;
+
   @OneToMany(() => Post, (post) => post.community)
   posts: Post[];
 

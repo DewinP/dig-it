@@ -36,5 +36,6 @@ export interface ICommunityResponse {
     userId: string
   ): Promise<string>;
   getCommunity(name: string): Promise<Community | undefined>;
-  getAllCommunities(): Promise<Community[]>;
+  getAllCommunities(userId?: string): Promise<Community[]>;
+  isSubscribed(userId: string, communityId: string): Promise<boolean>;
 }

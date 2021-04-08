@@ -26,12 +26,12 @@ class PostController {
 
   public static GetCommunityPosts = async (req: Request, res: Response) => {
     let posts = await service.getCommunityPosts(req.params.communityId);
-    res.json({ posts });
+    res.json(posts);
   };
 
   public static GetAllPosts = async (_: Request, res: Response) => {
     let posts = await service.getAllPosts();
-    res.json({ posts });
+    res.json(posts);
   };
 
   public static GetPostByUser = async (req: Request, res: Response) => {

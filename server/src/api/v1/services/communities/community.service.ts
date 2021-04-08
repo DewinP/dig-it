@@ -28,26 +28,38 @@ export class CommunityService implements ICommunityResponse {
   async createCommunity(input: ICommunityInput): Promise<Community> {
     return await getRepository(Community).save(input);
   }
+
+  async isSubscribed(userId: string, communityId: string) {
+    const isSubscribed = await getRepository(Community_User)
+      .createQueryBuilder("subscription")
+      .where("subscription.userId = :userId", { userId })
+      .andWhere("subscription.communityId = :communityId", { communityId })
+      .getCount();
+
+    return Boolean(isSubscribed);
+  }
+
   async getCommunity(name: string): Promise<Community | undefined> {
     return await getRepository(Community)
       .createQueryBuilder("community")
       .leftJoinAndSelect("community.members", "members")
-      .leftJoinAndSelect("community.posts", "posts")
-      .leftJoinAndSelect("posts.author", "author")
-      .select(["community", "posts", "members"])
-      .addSelect(["author.id", "author.username", "author.avatar"])
-      .addSelect(["members.id", "members.userId"])
+      .loadRelationCountAndMap("community.members", "community.members")
+      .select(["community", "members"])
       .where("community.name = :name", { name: name })
       .getOne();
   }
-  async getAllCommunities(): Promise<Community[]> {
-    return await getRepository(Community)
-      .createQueryBuilder("community")
-      .leftJoinAndSelect("community.founder", "founder")
+  async getAllCommunities(userId: string | undefined): Promise<Community[]> {
+    let qb = getRepository(Community).createQueryBuilder("community");
+    return await qb
+      .leftJoinAndSelect("community.members", "members")
+      .loadRelationCountAndMap(
+        "community.isSubscribed",
+        "community.members",
+        "subscription",
+        (qb) => qb.andWhere("subscription.userId = :userId", { userId })
+      )
       .loadRelationCountAndMap("community.members", "community.members")
-      .loadRelationCountAndMap("community.posts", "community.posts")
       .select(["community"])
-      .addSelect(["founder.id", "founder.username", "founder.avatar"])
       .getMany();
   }
 }

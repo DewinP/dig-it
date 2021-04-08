@@ -68,12 +68,12 @@ export interface ICommunity {
   name: string;
   description: string;
   avatar: string;
-  posts: IPost[];
-  members: ISubscription[];
+  members: number;
   hero_img: string;
   founderId: string;
   createdAt: Date;
   updatedAt: Date;
+  isSubscribed: boolean;
 }
 
 export interface ICommunityInput {

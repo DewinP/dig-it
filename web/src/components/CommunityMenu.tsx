@@ -27,11 +27,6 @@ export const CommunityMenu: React.FC<CommunityMenuProps> = ({
         </Select>
       </Flex>
       <Input size="sm" w="sm" placeholder="search by title or author" />
-      <NavLink to={`${communityName}/submit`}>
-        <Button colorScheme="pink" size="sm">
-          create post
-        </Button>
-      </NavLink>
     </Flex>
   );
 };
