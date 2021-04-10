@@ -1,4 +1,4 @@
-import { Divider, Stack, Text } from "@chakra-ui/layout";
+import { Box, Divider, Flex, Stack, Text } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import React from "react";
 import { NavLink, useParams } from "react-router-dom";
@@ -19,9 +19,11 @@ export const CommunitySidebar: React.FC<CommunitySidebarProps> = ({}) => {
   let { isLoggedIn } = useAppSelector(selectCurrentUser);
 
   return (
-    <Stack padding="1rem" boxShadow="0px 0px 8px -6px black">
-      <Stack>
+    <Box boxShadow="0px 0px 8px -6px black">
+      <Flex padding="1rem" bg="linkedin.200">
         <Text fontWeight="semibold">About this community</Text>
+      </Flex>
+      <Stack padding="1rem">
         <Text fontSize="15px">{communityData?.description}</Text>
         <Divider />
         <Text fontSize="15px">Members: {communityData?.members}</Text>
@@ -33,6 +35,6 @@ export const CommunitySidebar: React.FC<CommunitySidebarProps> = ({}) => {
           </NavLink>
         )}
       </Stack>
-    </Stack>
+    </Box>
   );
 };

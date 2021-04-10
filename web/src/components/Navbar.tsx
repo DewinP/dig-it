@@ -40,9 +40,6 @@ export const Navbar: React.FC<{}> = () => {
         <Flex>
           {isLoggedIn && (
             <Flex>
-              <NavLink to="/create-community">
-                <Text mr="20px">Create community</Text>
-              </NavLink>
               <NavLink to="/c">
                 <Text mr="20px">Communities</Text>
               </NavLink>
@@ -62,6 +59,9 @@ export const Navbar: React.FC<{}> = () => {
                   </MenuItem>
                   <MenuItem as={Link} to="/account">
                     Settings
+                  </MenuItem>
+                  <MenuItem as={Link} to={`/create-community`}>
+                    Create a community
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
