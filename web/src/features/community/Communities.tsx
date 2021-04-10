@@ -5,7 +5,7 @@ import { CommunityBlock } from "../../components/CommunityBlock";
 import { Layout } from "../../components/Layout";
 
 export const Communities: React.FC<{}> = () => {
-  const { data, isLoading, isError } = useCommunitiesQuery();
+  const { data } = useCommunitiesQuery();
 
   return (
     <Layout showSidebar={false}>

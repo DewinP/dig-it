@@ -24,7 +24,7 @@ export const Layout: React.FC<LayoutProps> = ({
   communityHeader,
 }) => {
   return (
-    <Grid templateColumns="repeat(12, 1fr)">
+    <Grid templateColumns="repeat(12, 1fr)" columnGap="1rem">
       <GridItem colSpan={12}>
         <Navbar />
       </GridItem>
