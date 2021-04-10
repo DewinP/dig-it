@@ -13,7 +13,7 @@ export const Login: React.FC<{}> = () => {
   let history = useHistory();
   const initialValues: ILoginInput = { username: "", password: "" };
   return (
-    <Layout>
+    <Layout showSidebar={false}>
       <Stack>
         <Flex justify="center">
           <Heading size="lg">Welcome back!</Heading>

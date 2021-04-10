@@ -48,7 +48,7 @@ export class CommunityService implements ICommunityResponse {
       .where("community.name = :name", { name: name })
       .getOne();
   }
-  async getAllCommunities(userId: string | undefined): Promise<Community[]> {
+  async getAllCommunities(userId?: string): Promise<Community[]> {
     let qb = getRepository(Community).createQueryBuilder("community");
     return await qb
       .leftJoinAndSelect("community.members", "members")

@@ -18,6 +18,7 @@ import {
   IsNotEmpty,
   IsEmail,
 } from "class-validator";
+import { Post_Liked } from "./Post_Liked";
 
 @Entity()
 export class User extends BaseEntity {
@@ -64,4 +65,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Community_User, (community_user) => community_user.user)
   subscriptions: Community_User[];
+
+  @OneToMany(() => Post_Liked, (post_liked) => post_liked.user)
+  postLiked: Post_Liked[];
 }

@@ -7,15 +7,8 @@ import { Layout } from "../../components/Layout";
 export const Communities: React.FC<{}> = () => {
   const { data, isLoading, isError } = useCommunitiesQuery();
 
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
-  if (isError) {
-    return <div>Error</div>;
-  }
-
   return (
-    <Layout>
+    <Layout showSidebar={false}>
       <Stack>
         {data?.map((c) => (
           <CommunityBlock key={c.id} community={c} />

@@ -6,6 +6,7 @@ import { CommunityPost } from "../../components/CommunityPost";
 import { useCommunityQuery } from "../../app/services/api";
 import { Layout } from "../../components/Layout";
 import { CommunityPostList } from "../../components/CommunityPostList";
+import { CommunityHeader } from "../../components/CommunityHeader";
 
 interface RouteParams {
   communityName: string;
@@ -15,17 +16,14 @@ export const Community: React.FC<{}> = () => {
   const { data: communityData, isLoading, isError } = useCommunityQuery(
     communityName
   );
-  console.log("communityInfo", communityData);
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
-  if (isError) {
-    return <div>Error</div>;
-  }
   return (
-    <Layout showSidebar={true}>
+    <Layout
+      showSidebar={true}
+      communityHeader={<CommunityHeader community={communityData} />}
+    >
       <Stack>
         <CommunityMenu communityName={communityName} />
+        {/* Need to add post list*/}
         <Text>No posts in this community. Be the first one!</Text>
       </Stack>
     </Layout>

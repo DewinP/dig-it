@@ -14,7 +14,7 @@ export const CreateCommunity: React.FC<{}> = () => {
   let history = useHistory();
   const initialValues: ICommunityInput = { name: "", description: "" };
   return (
-    <Layout>
+    <Layout showSidebar={false}>
       <Stack spacing={10}>
         <Flex justify="center">
           <Heading size="lg">Create your a community</Heading>

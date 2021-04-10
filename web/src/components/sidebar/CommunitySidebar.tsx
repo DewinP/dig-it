@@ -19,24 +19,18 @@ export const CommunitySidebar: React.FC<CommunitySidebarProps> = ({}) => {
   let { isLoggedIn } = useAppSelector(selectCurrentUser);
 
   return (
-    <Stack
-      minWidth="250px"
-      padding="10px"
-      boxShadow="0px 0px 8px -6px black"
-      ml="10px"
-    >
+    <Stack padding="1rem" boxShadow="0px 0px 8px -6px black">
       <Stack>
         <Text fontWeight="semibold">About this community</Text>
         <Text fontSize="15px">{communityData?.description}</Text>
         <Divider />
         <Text fontSize="15px">Members: {communityData?.members}</Text>
-        <NavLink to={`${communityData?.name}/submit`}>
-          <Button colorScheme="teal" size="sm" w="100%">
-            create post
-          </Button>
-        </NavLink>
         {isLoggedIn && communityData && (
-          <SubscriptionButton community={communityData} />
+          <NavLink to={`${communityData?.name}/submit`}>
+            <Button colorScheme="teal" size="sm" w="100%">
+              create post
+            </Button>
+          </NavLink>
         )}
       </Stack>
     </Stack>

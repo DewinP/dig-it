@@ -7,7 +7,6 @@ import {
   IPost,
   IPostInput,
   IRegisterInput,
-  ISubscription,
   IUser,
 } from "../../interfaces/interfaces";
 
@@ -44,7 +43,7 @@ export const api = createApi({
         }),
         invalidates: [{ type: "Community", id: "all" }],
       }),
-      subscribe: build.mutation<ISubscription, string>({
+      subscribe: build.mutation<{}, string>({
         query: (communityId) => ({
           url: "c/sub",
           method: "POST",
@@ -58,7 +57,7 @@ export const api = createApi({
       unsubscribe: build.mutation<string, string>({
         query: (communityId) => ({
           url: "c/unsub",
-          method: "POST",
+          method: "DELETE",
           body: { communityId },
         }),
         invalidates: (_, args) => [
@@ -91,30 +90,35 @@ export const api = createApi({
       }),
       user: build.query<IUser, string>({
         query: (name) => `users/${name}`,
-        provides: (_, args) => [
+        provides: (returnValue) => [
           {
             type: "User" as const,
-            id: args,
+            id: returnValue.id,
           },
         ],
       }),
       post: build.query<IPost, string>({
         query: (title) => `posts/${title}`,
-        provides: (_, args) => [
+        provides: (returnValue) => [
           {
             type: "Post" as const,
-            id: args,
+            id: returnValue.id,
           },
         ],
       }),
       communityPosts: build.query<IPost[], string>({
         query: (communityId) => `posts/community/${communityId}`,
-        provides: (_, args) => [{ type: "Post" as const, id: args }],
+        provides: (returnValue, args) => [
+          { type: "Post" as const, id: args },
+          ...returnValue.map((p) => ({
+            type: "Post" as const,
+            id: p.id,
+          })),
+        ],
       }),
       userPosts: build.query<IPost[], string>({
         query: (username) => `posts/user/${username}`,
         provides: (returnValue) => [
-          { type: "Post" as const, id: returnValue[0].author.id },
           ...returnValue.map((p) => ({
             type: "Post" as const,
             id: p.id,
@@ -142,6 +146,22 @@ export const api = createApi({
           { type: "Post", id: returnValue.author.id },
         ],
       }),
+      likePost: build.mutation<{}, { postId: string; communityId: string }>({
+        query: ({ postId, communityId }) => ({
+          url: "posts/like",
+          method: "POST",
+          body: { postId, communityId },
+        }),
+        invalidates: (_, args) => [{ type: "Post", id: args.postId }],
+      }),
+      unlikePost: build.mutation<{}, string>({
+        query: (postId) => ({
+          url: "posts/like",
+          method: "DELETE",
+          body: { postId },
+        }),
+        invalidates: (_, args) => [{ type: "Post", id: args }],
+      }),
     };
   },
 });
@@ -162,4 +182,6 @@ export const {
   useCommunityPostsQuery,
   useCreatePostMutation,
   useUserPostsQuery,
+  useLikePostMutation,
+  useUnlikePostMutation,
 } = api;

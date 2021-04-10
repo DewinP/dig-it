@@ -38,7 +38,7 @@ export const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({
         <Button
           size="sm"
           isLoading={unsubscribeIsLoading}
-          variant="ghost"
+          variant="outline"
           onClick={() => setIsOpen(true)}
         >
           unsubscribe
@@ -90,7 +90,7 @@ export const SubscriptionButton: React.FC<SubscriptionButtonProps> = ({
   return (
     <Button
       size="sm"
-      colorScheme="pink"
+      colorScheme="linkedin"
       isLoading={subscribeIsLoading}
       onClick={() => {
         subscribe(community.id)

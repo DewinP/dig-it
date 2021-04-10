@@ -21,14 +21,6 @@ export const Profile: React.FC<{}> = () => {
   const { data: userPosts, isLoading: postsIsLoading } = useUserPostsQuery(
     username
   );
-  console.log(userPosts);
-
-  if (userIsLoading) {
-    return <div>Loading</div>;
-  }
-  if (isError) {
-    return <div>Is error</div>;
-  }
   return (
     <Layout>
       <Tabs isFitted>

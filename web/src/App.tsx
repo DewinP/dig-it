@@ -30,6 +30,15 @@ function ProtectedRoute({ ...routeProps }: RouteProps) {
   }
 }
 
+function AdminRoute({ ...routeProps }: RouteProps) {
+  let { user } = useAppSelector(selectCurrentUser);
+  if (user.isAdmin) {
+    return <Route {...routeProps} />;
+  } else {
+    return <Redirect to="/login" />;
+  }
+}
+
 function App() {
   useMeQuery();
   let { isFetching } = useAppSelector(selectCurrentUser);
@@ -41,6 +50,10 @@ function App() {
     return (
       <Router>
         <Switch>
+          {/* Admin routes */}
+
+          <AdminRoute path="/upload/avatar" exact />
+
           {/* Private routes */}
           <ProtectedRoute
             path="/create-community"

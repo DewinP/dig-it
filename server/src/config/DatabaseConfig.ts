@@ -8,6 +8,7 @@ import {
   Post,
   User,
 } from "../api/v1/models";
+import { Post_Liked } from "../api/v1/models/Post_Liked";
 
 export default {
   type: "postgres",
@@ -16,5 +17,5 @@ export default {
   password: DB_PASS,
   logging: true,
   synchronize: true,
-  entities: [User, Comment, Community, Community_User, Post],
+  entities: [User, Comment, Community, Community_User, Post, Post_Liked],
 } as ConnectionOptions;

@@ -57,7 +57,6 @@ export interface IPostInput {
   authorId: string;
   communityId: string;
 }
-
 export interface ICommunity {
   id: string;
   name: string;
@@ -69,6 +68,12 @@ export interface ICommunity {
   createdAt: Date;
   updatedAt: Date;
   isSubscribedByUser: boolean;
+}
+
+export interface ILikeInput {
+  userId: string;
+  postId: string;
+  communityId: string;
 }
 
 export interface ILoginInput {

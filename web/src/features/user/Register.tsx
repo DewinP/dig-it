@@ -17,7 +17,7 @@ export const Register: React.FC<{}> = () => {
     password: "",
   };
   return (
-    <Layout>
+    <Layout showSidebar={false}>
       <Stack>
         <Flex justify="center">
           <Heading size="lg">Join Dig-it!</Heading>

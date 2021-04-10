@@ -42,38 +42,6 @@ export const authSlice = createSlice({
       state.user = {} as IMe;
       state.isLoggedIn = false;
     });
-    builder.addMatcher(
-      api.endpoints.createPost.matchFulfilled,
-      (state, { payload }) => {
-        state.user.posts.push(payload.result);
-      }
-    );
-    builder.addMatcher(
-      api.endpoints.createPost.matchFulfilled,
-      (state, { payload }) => {
-        state.user.posts.push(payload.result);
-      }
-    );
-    builder.addMatcher(
-      api.endpoints.subscribe.matchFulfilled,
-      (state, { payload }) => {
-        state.user.subscriptions.push(payload.result);
-      }
-    );
-    builder.addMatcher(
-      api.endpoints.unsubscribe.matchFulfilled,
-      (state, { payload }) => {
-        state.user.subscriptions = state.user.subscriptions.filter((s) => {
-          return s.id !== payload.result;
-        });
-      }
-    );
-    builder.addMatcher(
-      api.endpoints.createPost.matchFulfilled,
-      (state, { payload }) => {
-        state.user.posts.push(payload.result);
-      }
-    );
   },
 });
 

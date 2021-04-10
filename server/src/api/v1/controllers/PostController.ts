@@ -11,7 +11,10 @@ class PostController {
     res: Response,
     next: NextFunction
   ) => {
-    let post = await service.getPostByTitle(req.params.title);
+    let post = await service.getPostByTitle(
+      req.params.title,
+      req.session.user?.id
+    );
     if (post) {
       res.json(post);
     } else {
@@ -24,18 +27,54 @@ class PostController {
     }
   };
 
+  public static LikePost = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      await service.likePost({
+        userId: req.session.user!.id,
+        postId: req.body.postId,
+        communityId: req.body.communityId,
+      });
+      res.sendStatus(httpCode.SUCCESS_NO_CONTENT);
+    } catch (error) {
+      next();
+    }
+  };
+
+  public static UnlikePost = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      await service.unlikePost(req.body.postId, req.session.user!.id);
+      res.sendStatus(httpCode.SUCCESS_NO_CONTENT);
+    } catch (error) {
+      next();
+    }
+  };
+
   public static GetCommunityPosts = async (req: Request, res: Response) => {
-    let posts = await service.getCommunityPosts(req.params.communityId);
+    let posts = await service.getCommunityPosts(
+      req.params.communityId,
+      req.session.user?.id
+    );
     res.json(posts);
   };
 
-  public static GetAllPosts = async (_: Request, res: Response) => {
-    let posts = await service.getAllPosts();
+  public static GetAllPosts = async (req: Request, res: Response) => {
+    let posts = await service.getAllPosts(req.session.user?.id);
     res.json(posts);
   };
 
   public static GetPostByUser = async (req: Request, res: Response) => {
-    let posts = await service.getPostsByUser(req.params.username);
+    let posts = await service.getPostsByUser(
+      req.params.username,
+      req.session.user?.id
+    );
     res.json(posts);
   };
 
