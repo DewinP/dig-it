@@ -24,7 +24,7 @@ export const CreatePost: React.FC<{}> = () => {
     return <div>...Loading</div>;
   } else
     return (
-      <Layout>
+      <Layout showSidebar={false}>
         <Stack spacing={10}>
           <Flex justify="center">
             <Heading size="lg">Create new post</Heading>

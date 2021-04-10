@@ -11,6 +11,7 @@ import {
 import { User } from "./User";
 import { Comment } from "./Comment";
 import { Community } from "./Community";
+import { Post_Liked } from "./Post_Liked";
 
 @Entity()
 export class Post extends BaseEntity {
@@ -43,4 +44,7 @@ export class Post extends BaseEntity {
 
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
+
+  @OneToMany(() => Post_Liked, (post_liked) => post_liked.post)
+  likedUsers: Post_Liked[];
 }

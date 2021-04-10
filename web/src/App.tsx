@@ -7,7 +7,6 @@ import {
   RouteProps,
   Redirect,
 } from "react-router-dom";
-import { Layout } from "./components/Layout";
 import { Login } from "./features/user/Login";
 import { Register } from "./features/user/Register";
 import { AccountSettings } from "./features/user/AccountSettings";
@@ -31,9 +30,18 @@ function ProtectedRoute({ ...routeProps }: RouteProps) {
   }
 }
 
+function AdminRoute({ ...routeProps }: RouteProps) {
+  let { user } = useAppSelector(selectCurrentUser);
+  if (user.isAdmin) {
+    return <Route {...routeProps} />;
+  } else {
+    return <Redirect to="/login" />;
+  }
+}
+
 function App() {
   useMeQuery();
-  let { user, isFetching } = useAppSelector(selectCurrentUser);
+  let { isFetching } = useAppSelector(selectCurrentUser);
   const [showLogoSpinner, setShowLogoSpinner] = useState(true);
   setTimeout(() => setShowLogoSpinner(false), 2000);
   if (isFetching || showLogoSpinner) {
@@ -42,6 +50,10 @@ function App() {
     return (
       <Router>
         <Switch>
+          {/* Admin routes */}
+
+          <AdminRoute path="/upload/avatar" exact />
+
           {/* Private routes */}
           <ProtectedRoute
             path="/create-community"

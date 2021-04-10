@@ -4,6 +4,9 @@ export interface IPost {
   body: string;
   authorId: string;
   communityId: string;
+  isLiked: boolean;
+  likes: number;
+  isAdmin: boolean;
   author: {
     id: string;
     username: string;
@@ -13,8 +16,8 @@ export interface IPost {
     name: string;
     avatar: string;
   };
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IPostInput {
@@ -26,9 +29,8 @@ export interface IMe {
   id: string;
   username: string;
   email: string;
-  posts: IPost[];
-  subscriptions: ISubscription[];
-  createdAt: Date;
+  createdAt: string;
+  isAdmin: string;
 }
 
 export interface IUser {
@@ -36,15 +38,7 @@ export interface IUser {
   username: string;
   avatar: string;
   posts: IPost[];
-  createdAt: Date;
-}
-
-export interface ISubscription {
-  id: string;
-  userId: string;
-  communityId: string;
   createdAt: string;
-  updatedAt: string;
 }
 
 export interface ILoginInput {
@@ -68,12 +62,12 @@ export interface ICommunity {
   name: string;
   description: string;
   avatar: string;
-  posts: IPost[];
-  members: ISubscription[];
+  members: number;
   hero_img: string;
   founderId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
+  isSubscribed: boolean;
 }
 
 export interface ICommunityInput {

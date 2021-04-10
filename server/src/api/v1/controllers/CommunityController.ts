@@ -71,7 +71,15 @@ class CommunityController {
   ) => {
     let community = await service.getCommunity(req.params.name);
     if (community) {
-      res.json(community);
+      let isSubscribed = false;
+      if (req.session.user?.id) {
+        isSubscribed = await service.isSubscribed(
+          req.session.user.id,
+          community.id
+        );
+      }
+      let result = { ...community, isSubscribed };
+      res.json(result);
     } else {
       next(
         new HttpExeception({
@@ -81,8 +89,8 @@ class CommunityController {
       );
     }
   };
-  public static GetAllCommunities = async (_: Request, res: Response) => {
-    let communities = await service.getAllCommunities();
+  public static GetAllCommunities = async (req: Request, res: Response) => {
+    let communities = await service.getAllCommunities(req.session.user?.id);
     res.json(communities);
   };
 }

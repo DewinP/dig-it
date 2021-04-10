@@ -12,6 +12,8 @@ export interface IUserMe {
   isAdmin: boolean;
 }
 
+export interface ICommunityInput {}
+
 export interface ISubscribedCommunity {
   id: string;
   user_ID: string;
@@ -53,6 +55,24 @@ export interface IPostInput {
   title: string;
   body: string;
   authorId: string;
+  communityId: string;
+}
+export interface ICommunity {
+  id: string;
+  name: string;
+  description: string;
+  avatar: string;
+  members: number;
+  hero_img: string;
+  founderId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  isSubscribedByUser: boolean;
+}
+
+export interface ILikeInput {
+  userId: string;
+  postId: string;
   communityId: string;
 }
 

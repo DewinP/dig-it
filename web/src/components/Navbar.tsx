@@ -21,7 +21,7 @@ export const Navbar: React.FC<{}> = () => {
   let [logout] = useLogoutMutation();
   let history = useHistory();
   return (
-    <Fragment>
+    <>
       <Flex
         h="50px"
         w="100%"
@@ -29,8 +29,8 @@ export const Navbar: React.FC<{}> = () => {
         zIndex={2}
         top="0"
         justify="space-between"
+        paddingX={{ base: "0px", md: "50px" }}
         align="center"
-        paddingX="50px"
       >
         <Flex>
           <NavLink to="/">
@@ -87,6 +87,6 @@ export const Navbar: React.FC<{}> = () => {
           )}
         </Flex>
       </Flex>
-    </Fragment>
+    </>
   );
 };

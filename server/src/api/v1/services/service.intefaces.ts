@@ -4,14 +4,17 @@ import {
   IRegisterInput,
   ISubscriptionInput,
   ICommunityInput,
+  ILikeInput,
 } from "../interfaces/interfaces";
 import { Community, Community_User, Post, User } from "../models";
 
 export interface IPostResponse {
-  getPostByTitle(title: string): Promise<Post | undefined>;
-  getCommunityPosts(communityId: string): Promise<Post[]>;
-  getPostsByUser(username: string): Promise<Post[]>;
-  getAllPosts(): Promise<Post[]>;
+  getPostByTitle(title: string, userId: string): Promise<Post | undefined>;
+  getCommunityPosts(communityId: string, userId?: string): Promise<Post[]>;
+  likePost(input: ILikeInput): Promise<void>;
+  unlikePost(postId: string, userId: string): Promise<void>;
+  getPostsByUser(username: string, userId?: string): Promise<Post[]>;
+  getAllPosts(userId?: string): Promise<Post[]>;
   createPost(input: IPostInput): Promise<string>;
 }
 
@@ -36,5 +39,6 @@ export interface ICommunityResponse {
     userId: string
   ): Promise<string>;
   getCommunity(name: string): Promise<Community | undefined>;
-  getAllCommunities(): Promise<Community[]>;
+  getAllCommunities(userId?: string): Promise<Community[]>;
+  isSubscribed(userId: string, communityId: string): Promise<boolean>;
 }

@@ -10,6 +10,8 @@ router.get("/:title", PostController.GetPostByTitle);
 router.get("/community/:communityId", PostController.GetCommunityPosts);
 router.get("/user/:username", PostController.GetPostByUser);
 router.post("/", isAuth, validatePost, PostController.CreatePost);
+router.post("/like", isAuth, PostController.LikePost);
+router.delete("/like", isAuth, PostController.UnlikePost);
 router.patch("/:title");
 router.delete("/:title");
 
